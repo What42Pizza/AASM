@@ -1,0 +1,61 @@
+This is a list of functions that would be build into this language.
+
+
+
+
+
+void print (any In) // prints the given value to the enviroment's log, cast to a string
+
+
+
+
+
+float random ()                                 // 0 - 1
+float random (float RangeEnd)                   // returns float
+float random (float RangeStart, float RangeEnd)
+int   random (int RangeEnd)                     // returns int
+int   random (int RangeStart, int RangeEnd)
+
+
+
+int ceil (float Num) // strings are cast, but this errors if either the string cannot cast or the input isn't an int, float, or string
+
+int floor (float Num) // same notes as ceil()
+
+
+
+
+
+string type (any In) // gives the type of data being held by the input. the output can be any of the following:
+	int
+	float
+	bool
+	string
+	table
+	function
+	enviroment
+	null
+
+
+
+bool tableOnlyContainsType (table TableIn, string Type) // returns whether or not the given table contains only the given data type. errors if not given a table as the first argument and string containing data type name as the second argument
+
+
+
+table getKeys (table TableIn) // alternative to [table name].keys; returns a new table containing all the keys of the first table, given in numerical order. errors if not given table as first argument
+
+int getLength (table TableIn) // alternative to [table name].length; returns the number of unique keys in the given table. errors if not given table as first argument
+
+
+
+
+
+table {bool, string} try (function In, [array args]) // calls the function and catches any errors. returns false if not given a function as the first argument
+
+void crash (string Message) // crashes the enviroment and gives an error
+
+
+
+
+
+enviroment createEnviroment (array {string} In) // creates a new enviroment, with the input array holding the code for the enviroment

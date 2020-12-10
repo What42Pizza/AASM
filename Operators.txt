@@ -1,0 +1,53 @@
+Operators:
+
++    add
+-    subtract
+*    multiply
+/    divide
+%    modulo
+%%   corrected modulo (for negative numbers)
+^    power
+..   concat
+
+==   equal
+!=   not equal
+>    greater than
+<    less than
+>=   greater than or equal to
+<=   less than or equal to
+
+and  bool and
+or   bool or
+not  bool not
+xor  bool xor
+
+&&   bitwise and
+||   bitwise or
+!!   bitwise not
+^^   bitwise xor
+<<   shift left
+>>   shift right
+
+
+
+In-place operators:
+
+[name] ++;   increment [name]
+[name] --;   decrement [name]
+[name] <<<;  shift [name] left by 1
+[name] >>>;  shift [name] right by 1
+[name] !!;   bitwise not [name]
+
+[name] +=  [value];  increase [name] by [value]
+[name] -=  [value];  decrease [name] by [value]
+[name] *=  [value];  multiply [name] by [value]
+[name] /=  [value];  divide   [name] by [value]
+[name] %=  [value];  modulo   [name] by [value]
+[name] ^=  [value];  take [name] to the power of [value]
+[name] ..= [value];  concat   [value] to [name]
+
+[name] &&= [value];  bitwise and [name] by [value]
+[name] ||= [value];  bitwise or  [name] by [value]
+[name] ^^= [value];  bitwise xor [name] by [value]
+[name] <<= [value];  shift [name] left  [value] times
+[name] >>= [value];  shift [name] right [value] times

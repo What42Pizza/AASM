@@ -1,0 +1,67 @@
+level 1:
+
+
+
+var Ball = this.Parent; // "this" would refer to this script
+
+var BallXVel = 5;
+var BallYVel = 0;
+
+
+
+function PerFrame:
+	pop; // Time Delta
+	
+	Ball.XPos += BallXVel;
+	Ball.YPos += BallYVel;
+	
+	BallYVel ++;
+	
+	if not Ball.YPos + Ball.YSize / 2 > Window.Height jump to 'end';
+		BallYVel *= -1;
+	#end:
+	
+	if not Ball.XPos + Ball.XSize / 2 > Window.Width or Ball.XPos - Ball.XSize / 2 < 0 jump to 'end'; // This would detect that there are two 'end' labels, and it will jump to the nearest forward label
+		BallXVel *= -1;
+	#end:
+	
+	return;
+	
+// end
+
+
+
+
+
+
+
+
+
+
+Level 3:
+
+
+
+var Ball = this.Parent;
+
+var BallXVel = 5;
+var BallYVel = 0;
+
+
+
+function PerFrame() {
+	
+	Ball.XPos += BallXVel;
+	Ball.YPos += BallYVel;
+	
+	BallYVel ++;
+	
+	if Ball.YPos + Ball.YSize / 2 > Window.Height {
+		BallYVel *= -1;
+	}
+	
+	if Ball.XPos + Ball.XSize / 2 > Window.Width or Ball.XPos - Ball.XSize / 2 < 0 {
+		BallXVel *= -1;
+	}
+	
+}
