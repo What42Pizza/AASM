@@ -17,11 +17,11 @@ function PerFrame:
 	
 	BallYVel ++;
 	
-	if not Ball.YPos + Ball.YSize / 2 > Window.Height jump to 'end';
+	if not (Ball.YPos + Ball.YSize / 2 > Window.Height) jump to 'end';
 		BallYVel *= -1;
 	#end:
 	
-	if not Ball.XPos + Ball.XSize / 2 > Window.Width or Ball.XPos - Ball.XSize / 2 < 0 jump to 'end'; // This would detect that there are two 'end' labels, and it will jump to the nearest forward label
+	if not (Ball.XPos + Ball.XSize / 2 > Window.Width or Ball.XPos - Ball.XSize / 2 < 0) jump to 'end'; // This would detect that there are two 'end' labels, and it will jump to the nearest forward label
 		BallXVel *= -1;
 	#end:
 	
@@ -56,11 +56,11 @@ function PerFrame() {
 	
 	BallYVel ++;
 	
-	if Ball.YPos + Ball.YSize / 2 > Window.Height {
+	if (Ball.YPos + Ball.YSize / 2 > Window.Height) {
 		BallYVel *= -1;
 	}
 	
-	if Ball.XPos + Ball.XSize / 2 > Window.Width or Ball.XPos - Ball.XSize / 2 < 0 {
+	if (Ball.XPos + Ball.XSize / 2 > Window.Width or Ball.XPos - Ball.XSize / 2 < 0) {
 		BallXVel *= -1;
 	}
 	

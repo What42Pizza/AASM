@@ -5,25 +5,25 @@ are all the statements you can make:
 
 var [name];
 
-creates a new var named [var name] and sets it to null
+   creates a new var named [var name] and sets it to null
 
 var [name] = [value];
 
-creates a new var named [var name] and sets it to whatever [value] evaluates to
+   creates a new var named [var name] and sets it to whatever [value] evaluates to
 
 
 
 [name] = [value];
 
-sets the var [name] to whatever [value] evaluates to
+   sets the var [name] to whatever [value] evaluates to
 
 [name] [in-place operator];
 
-applies [in-place operator] to [name]
+   applies [in-place operator] to [name]
 
 [name] [in-place operator] [value];
 
-applies [in-place operator] to [name] using whatever [value] evalutaes to
+   applies [in-place operator] to [name] using whatever [value] evalutaes to
 
 
 
@@ -31,66 +31,66 @@ applies [in-place operator] to [name] using whatever [value] evalutaes to
 
 [name] ();
 
-calls the function named [name] (/ jumps to function labeled as [name])
+   calls the function named [name] (/ jumps to function labeled as [name])
 
 [name] ([args]...);
 
-level 3 only
-calls the function named [name] with the specifies arguments
+   level 3 only
+   calls the function named [name] with the specifies arguments
 
 
 
 return [value]...;
 
-evaluates and pushes the value(s) [value]... to the stack then returns from a function / sub-routine
+   evaluates and pushes the value(s) [value]... to the stack then returns from a function / sub-routine
 
 
 
 push [value];
 
-all levels, only intended for level 1 and 2
-evaluates [value] and pushes the result to the stack
+   all levels, only intended for level 1 and 2
+   evaluates [value] and pushes the result to the stack
 
 pop;
 
-no determined use; removes and discards top value of stack
+   no determined use; removes and discards top value of stack
 
 
 
 
 
-if [value] [code block]
+if ([value]) [code block]
 
-only level 2 and 3, requires semi-colon on level 2
-executes [code block] if [value] is true when evaluated and cast to bool
-
-
-
-while [value] [code block]
-
-only level 2 and 3, requies semi-colon on level 2
-executes [code block] if [value] is true when evaluated and cast to bool, then moves pointer back 1
+   only level 2 and 3, requires semi-colon on level 2
+   executes [code block] if [value] is true when evaluated and cast to bool
 
 
 
-for var [name] = [value1]; [value2] [code block]
+while ([value]) [code block]
 
-only level 2 and 3, requies semi-colon on level 2
-creates a new var names [name] and sets it to [value1], then executes [code block] if [value2] is true when evaluated and cast to bool, then increments var [name] by 1, then repeats starting from evaluating [value2] until it casts to false
-
-
-
-for var [name] = [value1], [value2], [statement] [code block]
-
-only level 2 and 3, requies semi-colon on level 2
-creates a new var names [name] and sets it to [value1], then executes [code block] if [value2] is true or finishes stament if [value2] is false when evaluated and cast to bool, then executes [statement], then repeats starting from evaluating [value2]
+   only level 2 and 3, requies semi-colon on level 2
+   executes [code block] if [value] is true when evaluated and cast to bool, then moves pointer back 1
 
 
 
-if [value] jump to '[label name]';
+for (var [name] = [value1], [value2]) [code block]
 
-jumps to [label name] if [value] is true when evaluated and cast to bool
+   only level 2 and 3, requies semi-colon on level 2
+   creates a new var names [name] and sets it to [value1], then executes [code block] if [value2] is true when evaluated and cast to bool, then increments var [name] by 1, then repeats starting from evaluating [value2] until it casts to false
 
-if not [value] jump to '[label name]';
 
-jumps to [label name] if [value] if false when evaluated and cast to bool
+
+for (var [name] = [value1], [value2], [statement]) [code block]
+
+   only level 2 and 3, requies semi-colon on level 2
+   creates a new var names [name] and sets it to [value1], then executes [code block] if [value2] is true or finishes stament if [value2] is false when evaluated and cast to bool, then executes [statement], then repeats starting from evaluating [value2]
+
+
+
+if ([value]) jump to '[label name]';
+
+   jumps to [label name] if [value] is true when evaluated and cast to bool
+
+if not ([value]) jump to '[label name]';
+
+   jumps to [label name] if [value] if false when evaluated and cast to bool

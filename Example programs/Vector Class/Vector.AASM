@@ -1,0 +1,50 @@
+level 3:
+
+var Vector = {};
+setType (Vector, "Vector");
+Vector.removeNativeKeys();
+
+Vector.Points = {}
+Vector.length = function { // no parentheses here means no parentheses (necessary) when called
+	return THIS.Points.length; // "THIS" is a keyword reffering to whatever table held the function
+}
+
+Vector.new = function (Arg) {
+	var ArgType == getType (Arg);
+	var NewVector = clone (Vector);
+	if (ArgType == "table") {
+		NewVector.Points = Arg;
+		return NewVector;
+	}
+	if (ArgType == "int") {
+		NewVector.Points = newTable (Arg);
+		return NewVector;
+	}
+	crash ("Cannot create new vector; Arg type must be table or int.");
+}
+
+
+
+Vector.onOperation = function (Value, Operation) {
+	var ValueType = getType (Value);
+	
+	if (Operation == "indexed") {
+		if (ValueType != int) {crash ("You can only index Vectors with ints.");}
+		if (Value > THIS.length) {crash ("Vector index out of bounds; size: " .. THIS.length .. ", index: " .. DV .. ".");}
+		return THIS.Points[DV];
+	}
+	
+	if (ValueType == "Vector") {
+		var NewVector = Vector.new();
+		if (Operation == "+") {
+			if (THIS.length != Value.length) {crash ("Tried to add two vectors with different lengths.");}
+			for (var i = 1, THIS.length) {
+				NewVector[i] = THIS[i] + Value[i];
+			}
+			return NewVector;
+		}
+		// continues for other operations
+	}
+	
+	// continues for other DVs
+}

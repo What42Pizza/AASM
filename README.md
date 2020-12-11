@@ -26,7 +26,7 @@ This is supposed to be an advanced assembly language, and it comes in three leve
 function Factorial:
 	var Num = pop;
 	
-	if not Num > 1 jump to 'else';
+	if not (Num > 1) jump to 'else';
 		push Num - 1;
 		Factorial();
 		return Num * pop;
@@ -53,7 +53,7 @@ function Factorial:
 function Factorial {
 	var Num = pop;
 	
-	if Num > 1 {
+	if (Num > 1) {
 		push Num - 1;
 		return Num * Factorial();
 	}; else {
@@ -77,7 +77,7 @@ function Factorial {
 ```
 function Factorial (Num) {
 	
-	if Num > 1 {
+	if (Num > 1) {
 		return Num * Factorial (Num - 1);
 	} else {
 		return 1;
@@ -101,7 +101,7 @@ function Factorial (Num) {
 ```
 #Factorial_F:
 var Num = pop;
-if Num <= 1 jump to '0_else_0';
+if not (Num > 1) jump to '0_else_0';
 push Num - 1;
 Factorial(); // adds "_F" when searching for the label
 return Num * pop;
@@ -116,7 +116,7 @@ return 1;
 ```
 var Factorial = function {
 var Num = pop;
-if Num > 1 {
+if (Num > 1) {
 push Num - 1;
 return Num * Factorial();
 };
@@ -132,7 +132,7 @@ return 1;
 
 ```
 var Factorial = function (Num) {
-if Num > 1 {
+if (Num > 1) {
 return Num * Factorial (Num - 1);
 };
 else {
@@ -162,9 +162,14 @@ Num
 pop
 ;
 if
-Num <= 1
+not
+(
+Num > 1
+)
 jumpto
-'0_else_0'
+'
+0_else_0
+'
 ;
 push
 Num - 1
@@ -175,7 +180,8 @@ Factorial
 return
 Num * pop
 ;
-#0_else_0
+#
+0_else_0
 return
 1
 ;
@@ -204,7 +210,9 @@ Num
 pop
 ;
 if
+(
 Num > 1
+)
 BLOCK_1
 ;
 else
@@ -253,7 +261,9 @@ function
 Num
 )
 if
+(
 Num > 1
+)
 BLOCK_1
 ;
 else
@@ -281,4 +291,4 @@ return
 
 Started: 11/28/20
 
-Last updated: 12/10/20
+Last updated: 12/11/20

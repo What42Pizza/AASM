@@ -4,7 +4,7 @@ A Data Value is what is held by variables. There are 8 types of Data Values, whi
 	bool
 	string
 	table
-	function
+	function / code block
 	enviroment
 	null
 
@@ -28,17 +28,22 @@ bool:
 	[none]
 string:
 	.length // int; length of string
-	.chatAt // function; takes int as first arg, returns character at index; errors if int not given
 	.sub    // function; takes either 1 or 2 ints, return substring; errors if no ints given
 	.find   // function; takes string as first arg as a pattern and an optional int as the second arg, returns index of the found pattern or null if pattern not found; errors if string not given
+	.chatAt // function; takes int as first arg, returns character at index; errors if int not given
 table:
 	.length // int; length of table
 	.sub    // function; takes either 1 or 2 ints, returns subset of table; errors if no ints given
-	.removeNativeKeys // functions; disables these keys
+	.find   // function; takes DV as arg and returns the first found key that holds that DV; errors if no DV given
 	.keys   // array of DVs; contains an array of all this table's used keys
+	.onOperation // function; takes DV as first arg and string as second arg. by default, only works with ".." as second arg, and concats the first arg with the table; errors with incorrect args
+	.removeNativeKeys // functions; disables these keys
 function:
 	.arguments // array of strings; contains the name of the arguments used by the function
 enviroment:
 	.returnValue // DV; value returned by enviroment; used for requiring modules
 null:
 	[none]
+all:
+	.castTo // function; takes string as first arg, which defines the new data type to cast to; errors if string not given as first arg
+	.clone  // function; returns clone of DV

@@ -4,7 +4,15 @@ This is a list of functions that would be build into this language.
 
 
 
-void print (any In) // prints the given value to the enviroment's log, cast to a string
+null print (DV In) // prints the given value to the enviroment's log, cast to a string
+
+
+
+table {int seconds, int minutes, int hours} time() // gives the current time
+
+table {int day, int month, int year} date() // gives the current date
+
+int millis() // gives the number of milliseconds since the start of the program
 
 
 
@@ -22,11 +30,45 @@ int ceil (float Num) // strings are cast, but this errors if either the string c
 
 int floor (float Num) // same notes as ceil()
 
+float sqrt (float Num) // gives the square root of Num
+
+float log (float Num, float Base) // gives the logarithm of Num using base Base. if Base is null or not given, it defaults to 10
+
+float ln (float Num) // gives the logarithm of Num using the constant e as the base
+
+
+
+float sin (float Num) gives the sin of Num (in radians)
+
+float cos (float Num) gives the cos of Num (in radians)
+
+float tan (float Num) gives the tan of Num (in radians)
+
+float asin (float Num) gives the inverse sin of Num (in radians)
+
+float acos (float Num) gives the inverse cos of Num (in radians)
+
+float atan (float Num) gives the inverse tan of Num (in radians)
+
+float atan2 (float Y, float X) gives the angle of a triangle (in radians)
+
+float csc (float Num) gives the csc of Num (in radians)
+
+float sec (float Num) gives the sec of Num (in radians)
+
+float cot (float Num) gives the cot of Num (in radians)
+
+float acsc (float Num) gives the inverse csc of Num (in radians)
+
+float asec (float Num) gives the inverse sec of Num (in radians)
+
+float acot (float Num) gives the inverse cot of Num (in radians)
 
 
 
 
-string type (any In) // gives the type of data being held by the input. the output can be any of the following:
+
+string type (DV In) // gives the type of data being held by the input. the output can be any of the following:
 	int
 	float
 	bool
@@ -36,15 +78,21 @@ string type (any In) // gives the type of data being held by the input. the outp
 	enviroment
 	null
 
+null setType (DV In, string NewType) // sets the type of In to NewType. if NewType is an existing data type, it will also cast In to that data type
+
+boolean isBasicType (string TypeName) // returns whether TypeName is a basic type
+
+DV clone (DV In) // returns clone of In
+
 
 
 bool tableOnlyContainsType (table TableIn, string Type) // returns whether or not the given table contains only the given data type. errors if not given a table as the first argument and string containing data type name as the second argument
 
-
-
 table getKeys (table TableIn) // alternative to [table name].keys; returns a new table containing all the keys of the first table, given in numerical order. errors if not given table as first argument
 
 int getLength (table TableIn) // alternative to [table name].length; returns the number of unique keys in the given table. errors if not given table as first argument
+
+table newTable (int Length) // returns a new table with length Length
 
 
 
@@ -52,7 +100,7 @@ int getLength (table TableIn) // alternative to [table name].length; returns the
 
 table {bool, string} try (function In, [array args]) // calls the function and catches any errors. returns false if not given a function as the first argument
 
-void crash (string Message) // crashes the enviroment and gives an error
+null crash (string Message) // crashes the enviroment and gives an error
 
 
 
