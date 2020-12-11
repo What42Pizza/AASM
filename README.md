@@ -1,11 +1,12 @@
 # AASM
 ### Advanced Assembly
+### V0.0.2
 
 <br />
 <br />
 <br />
 
-This is supposed to be an advanced assembly language, and it comes in three levels, ranging from low level to high level. Though the execution is very low-level-like, the data stored in variables would be loosely-typed, so very high- level. Variables can hold integers, floats, booleans, strings, tables, functions / code blocks, enviroments, or null. Tables will also be called arrays when they only contain a complete set of integer keys.
+This is supposed to be an advanced assembly language, and it comes in three levels, ranging from low level to high level. Though the execution is very low-level-like, the data stored in variables would be loosely-typed, so very high- level. Variables can hold integers, floats, booleans, strings, tables, functions / code blocks, environments, or null. Tables will also be called arrays when they only contain a complete set of integer keys.
 
 <br />
 <br />
