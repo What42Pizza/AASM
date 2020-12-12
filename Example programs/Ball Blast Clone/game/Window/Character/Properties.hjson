@@ -1,0 +1,10 @@
+"Name": "Character",
+"Type": "ScreenElement",
+"XPos": "0.5",
+"YPos": "0.9",
+"XSize": "0.1",
+"YSize": "0.1",
+"XVel": "0",
+"YVel": "0",
+"Anchored": "true"
+"C": {}

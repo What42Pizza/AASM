@@ -1,0 +1,27 @@
+#Level3
+
+
+
+var Balls = {};
+
+var LastSpawnedTime = 0;
+
+
+
+while (true) {
+	wait;
+	
+	if (game.C.Playing and Balls.length < game.C.MaxBalls and millis() > LastSpawnedTime + 1000) {
+		var NewBall = new ("Ball"); // new() is implemented by the engine; pulls from game.Templates
+		NewBall.XPos = NewBall.XSize * -1;
+		NewBall.YPos = 0.2;
+		NewBall.Anchored = false;
+		NewBall["Move Script"].Enabled = true;
+		NewBall.Health = random(game.C.MaxHealth / 3, game.C.MaxHealth);
+		NewBall.Size = random(4);
+		Balls.insert(NewBall);
+		NewBall.Parent = game.Window;
+		LastSpawnedTime = millis();
+	}
+	
+}

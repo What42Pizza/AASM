@@ -1,0 +1,12 @@
+#Level3
+
+var Bullet = this.Parent;
+
+while (true) {
+	wait; // pause until next frame
+	
+	if (Bullet.YPos + Bullet.YSize / 2 < 0) {
+		Bullet.Delete();
+	}
+	
+}

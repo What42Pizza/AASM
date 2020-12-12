@@ -1,0 +1,28 @@
+#Level3
+
+
+
+var Character = this.Parent;
+var Shots = 0;
+
+
+
+while (game.C.Playing) {
+	var TimeDelta = wait;
+	
+	Character.XPos = Controls.Mouse.XPos;
+	
+	Shots += game.C.ShotsPerSecond * TimeDelta;
+	var ShotsThisFrame = floor(Shots);
+	Shots %= 1;
+	
+	for (var i = 1, ShotsThisFrame) {
+		var NewBullet = new ("Bullet");
+		NewBullet.XPos = this.XPos;
+		NewBullet.YPos = this.YPos;
+		NewBullet.Anchored = false;
+		NewBullet["Control Script"].Enabled = true;
+		NewBullet.Parent = game.Window;
+	}
+	
+}

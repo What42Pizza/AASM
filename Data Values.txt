@@ -5,7 +5,6 @@ A Data Value is what is held by variables. There are 8 types of Data Values, whi
 	string
 	table
 	function / code block
-	enviroment
 	null
 
 
@@ -36,12 +35,12 @@ table:
 	.sub    // function; takes either 1 or 2 ints, returns subset of table; errors if no ints given
 	.find   // function; takes DV as arg and returns the first found key that holds that DV; errors if no DV given
 	.keys   // array of DVs; contains an array of all this table's used keys
+	.insert // function; takes DV and optional int as args, inserts DV at specified pos or end; errors if no DV given
+	.remove // function; takes optional int as arg, removes and returns the DV at specified pos or end; errors if anything but int or null given as arg
 	.onOperation // function; takes DV as first arg and string as second arg. by default, only works with ".." as second arg, and concats the first arg with the table; errors with incorrect args
 	.removeNativeKeys // functions; disables these keys
 function:
-	.arguments // array of strings; contains the name of the arguments used by the function
-enviroment:
-	.returnValue // DV; value returned by enviroment; used for requiring modules
+	[none]
 null:
 	[none]
 all:

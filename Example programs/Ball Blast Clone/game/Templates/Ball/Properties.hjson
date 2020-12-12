@@ -1,0 +1,14 @@
+"Name": "Ball Template",
+"Type": "ScreenElement",
+"XPos": "-1",
+"YPos": "-1",
+"XSize": "0.1",
+"YSize": "0.1",
+"XVel": "0.5", // Move half way accross the screen every second
+"YVel": "0",
+"Anchored": "true"
+"C": { // custom properties
+	"Health": 0,
+	"Size": 0,
+	"Starting": "true"
+}

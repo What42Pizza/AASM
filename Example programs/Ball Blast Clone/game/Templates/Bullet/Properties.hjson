@@ -1,0 +1,10 @@
+"Name": "Bullet Template",
+"Type": "ScreenElement",
+"XPos": "-1",
+"YPos": "-1",
+"XSize": "0.1",
+"YSize": "0.1",
+"XVel": "0",
+"YVel": "-0.1",
+"Anchored": "true"
+"C": {}

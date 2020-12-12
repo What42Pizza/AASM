@@ -1,0 +1,9 @@
+"Name": "Game",
+"Type": "Game",
+"C": {
+	"Playing": true,
+	"ShotsPerSecond": 10,
+	"BulletDamage": 10,
+	"MaxBallHealth": 100,
+	"MaxBalls": 5
+}

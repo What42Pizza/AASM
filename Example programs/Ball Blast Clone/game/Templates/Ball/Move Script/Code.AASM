@@ -1,0 +1,65 @@
+#Level3
+
+var Ball = this.Parent;
+
+
+
+function KillBall() {
+	if (this.Size == 1) {return;}
+	var LeftBall  = new ("Ball");
+	var RightBall = new ("Ball");
+	LeftBall.XPos  = this.XPos;
+	LeftBall.YPos  = this.YPos;
+	RightBall.XPos = this.XPos;
+	RightBall.YPos = this.YPos;
+	LeftBall.XVel  = -0.5;
+	LeftBall.YVel  = -0.5;
+	RightBall.XVel =  0.5;
+	RightBall.YVel = -0.5;
+	LeftBall.Health  = this.Health / 2;
+	RightBall.Health = this.Health / 2;
+	LeftBall.Size  = this.Size - 1;
+	RightBall.Size = this.Size - 1;
+	LeftBall.Parent  = game.Window;
+	RightBall.Parent = game.Window;
+	this.Delete();
+}
+
+
+
+Ball.OnCollision.Connect(function (CollisionObject) {
+	if (CollisionObject.Name == "Bullet") {
+		Ball.Health -= game.C.BulletDamage;
+		if (Ball.Health <= 0) {
+			KillBall();
+		}
+		CollisionObject.Delete();
+	}
+	if (CollisionObject.Name == "Character") {
+		game.C.Playing = false;
+	}
+}
+
+
+
+while (true) {
+	wait; // pause until next frame
+	
+	// Apply gravity
+	Ball.YVel += 0.01;
+	
+	// Bounce off floor
+	if (Ball.YPos + Ball.YSize / 2 > 1) {
+		Ball.YVel *= -1;
+	}
+	
+	// Bounce of walls
+	if (Ball.XPos - Ball.XSize / 2 < 0 or Ball.XPos + Ball.XSize / 2 > 1) {
+		if (not Ball.C.Starting) {
+			Ball.XVel *= -1;
+		}
+	} else {
+		Ball.C.Starting = false;
+	}
+	
+}
