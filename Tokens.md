@@ -62,7 +62,8 @@ Num > 1
 push
 Num - 1 // These are kept as the same token so that the interpreter can more easily send it to the evaluator
 ;
-Factorial()
+Factorial
+()
 ;
 return
 Num * pop
@@ -71,6 +72,29 @@ Num * pop
 return
 1
 ;
+```
+
+<br />
+
+### Arranged into instructions:
+
+```
+[Factorial_F points to here; no labels are left in the tokens]
+V
+Num
+pop
+BN
+Num > 1
+0_else_0
+P
+Num - 1
+C
+Factorial
+R
+Num * pop
+[0_else_0 points to here]
+R
+1
 ```
 
 <br />
@@ -168,6 +192,47 @@ return
 ```
 
 <br />
+
+### Arranged into instructions:
+
+```
+block MAIN:
+
+V
+Factorial
+BLOCK_0
+
+
+
+block 0:
+
+V
+Num
+pop
+I
+Num > 1
+BLOCK_1
+E
+BLOCK_2
+
+
+
+block 1:
+
+P
+Num - 1
+R
+Num * Factorial()
+
+
+
+block 2:
+
+R
+1
+```
+
+<br />
 <br />
 <br />
 <br />
@@ -248,4 +313,41 @@ block 2:
 return
 1
 ;
+```
+
+<br />
+
+### Arranged into instructions:
+
+```
+block MAIN:
+
+V
+Factorial
+BLOCK_0
+
+
+
+block 0:
+
+F(
+Num
+)
+I
+Num > 1
+BLOCK_1
+E
+BLOCK_2
+
+
+
+block 1:
+R
+Num * Factorial (Num - 1)
+
+
+
+block 2:
+R
+1
 ```

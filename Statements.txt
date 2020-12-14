@@ -1,6 +1,8 @@
 Every line of code is a statement. Statements are always seperated by semi-colons (except level 3 code blocks). Here
 are all the statements you can make:
 
+ADD ELSE!!!!!!!!!!!!!!
+
 
 
 var [name];
@@ -53,7 +55,7 @@ push [value];
 
 pop;
 
-   no determined use; removes and discards top value of stack
+    no determined use, only intended for level 1 and 2
 
 
 
@@ -63,6 +65,13 @@ if ([value]) [code block]
 
    only level 2 and 3, requires semi-colon on level 2
    executes [code block] if [value] is true when evaluated and cast to bool
+
+
+
+else [code block]
+
+   only level 2 and 3, requires semi-colon on level 2
+   executes [code block] if the previous if failed
 
 
 
@@ -80,13 +89,6 @@ for (var [name] = [value1], [value2]) [code block]
 
 
 
-for (var [name] = [value1], [value2], [statement]) [code block]
-
-   only level 2 and 3, requies semi-colon on level 2
-   creates a new var names [name] and sets it to [value1], then executes [code block] if [value2] is true or finishes stament if [value2] is false when evaluated and cast to bool, then executes [statement], then repeats starting from evaluating [value2]
-
-
-
 if ([value]) jump to '[label name]';
 
    jumps to [label name] if [value] is true when evaluated and cast to bool
@@ -94,3 +96,174 @@ if ([value]) jump to '[label name]';
 if not ([value]) jump to '[label name]';
 
    jumps to [label name] if [value] if false when evaluated and cast to bool
+
+
+
+jump to '[label name]';
+
+   jumps to [label name]
+
+
+
+
+
+
+
+
+
+
+Statements after processing:
+
+
+
+var [Var Name];
+
+V // simply declare var
+[Var Name]
+
+
+
+var [Var Name] = [Value];
+
+N // new var with value
+[Var Name]
+[Value]
+
+
+
+[Var Name] = [Value];
+
+S // set var
+[Var Name]
+[Value
+
+
+
+[Var Name] [In-Place Operator];
+
+O // in-place operator
+[Var Name]
+[In-Place Operator]
+
+
+
+[Var Name] [In-Place Operator] [Value];
+
+OV // in-place operator w/ value
+[Var Name]
+[In-Place Operator]
+[Value]
+
+
+
+
+
+[Var Name] ();
+
+C // call function
+// only level 1 and 2
+
+
+
+[Var Name] ([ARGS]);
+
+C // call function
+[Value] // table; args
+// only level 3
+
+
+
+return [Value];
+
+R // return
+[Value]
+
+
+
+push [Value];
+
+P // push
+[Value];
+// only level 1 and 2
+
+
+
+pop;
+
+PP // pop
+// only level 1 and 2
+
+
+
+
+
+if ([Value]) [Code Block];
+
+I // if
+[Value]
+[Code Block]
+// only level 2 and 3
+
+
+
+else [Code Block];
+
+E // else
+[Code Block]
+// only level 2 and 3
+
+
+
+while ([Value]) [Code Block];
+
+W // while
+[Value]
+[Code Block]
+// only level 2 and 3
+
+
+
+for (var [Var Name] = [Value], [Value]) [Code Block];
+
+F // for
+[Var Name] // temp var to be created
+[Value] // initial value of var
+[Value] // if int / float, inc until var > this val; if bool, inc until this val == false
+[Code Block]
+// only level 2 and 3
+
+
+
+
+
+if ([Value]) jump to '[Label Name]';
+
+B // branch
+[Value] // jump if this casts to true
+[Label Name] // label to jump to
+// only level 1
+
+
+
+if not ([Value]) jump to '[Label Name]';
+
+BN // branch not
+[Value] // jump if this casts to false
+[Label Name] // label to jump to
+// only level 1
+
+
+
+jump to '[Label Name]';
+
+J // jump
+[Label Name]
+// only level 1
+
+
+
+
+
+F(
+[Code]
+// only level 2 and 3, used at the start of a block to denote the names of the arguments for a function

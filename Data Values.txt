@@ -1,4 +1,4 @@
-A Data Value is what is held by variables. There are 8 types of Data Values, which are:
+A Data Value is what is held by variables. There are 7 types of Data Values, which are:
 	int
 	float
 	bool
@@ -9,20 +9,19 @@ A Data Value is what is held by variables. There are 8 types of Data Values, whi
 
 
 
-Each data type can be indexed. Arrays act exactly how you'd expect, so array[key] would give you the value for that
-key. You could also do array.key, and this would act as array["key"]. You can use this type of indexing for any type
-of Data Value (DV), not just tables. Here are all the indexes you can read and write to for all types of DVs:
+Each data type can be indexed. Tables act exactly how you'd expect, so table[key] would
+give you the value for that key. You could also do table.key, and this would act as
+table["key"]. You can use this type of indexing for any type of Data Value (DV), not just
+tables. Here are all the indexes you can read and write to for all types of DVs:
 
 int:
 	.sign     // string; either "+" or "-"
 	.signInt  // int; either 1 for + or 0 for -
 	.signBool // bool; either true for + or false for -
-
 float:
 	.sign     // string; either "+" or "-"
 	.signInt  // int; either 1 for + or 0 for -
 	.signBool // bool; either true for + or false for -
-
 bool:
 	[none]
 string:
@@ -30,6 +29,7 @@ string:
 	.sub    // function; takes either 1 or 2 ints, return substring; errors if no ints given
 	.find   // function; takes string as first arg as a pattern and an optional int as the second arg, returns index of the found pattern or null if pattern not found; errors if string not given
 	.chatAt // function; takes int as first arg, returns character at index; errors if int not given
+	[int Index] // string; returns char at index Index
 table:
 	.length // int; length of table
 	.sub    // function; takes either 1 or 2 ints, returns subset of table; errors if no ints given
@@ -38,7 +38,9 @@ table:
 	.insert // function; takes DV and optional int as args, inserts DV at specified pos or end; errors if no DV given
 	.remove // function; takes optional int as arg, removes and returns the DV at specified pos or end; errors if anything but int or null given as arg
 	.onOperation // function; takes DV as first arg and string as second arg. by default, only works with ".." as second arg, and concats the first arg with the table; errors with incorrect args
+	[DV Key] // DV; returns value at specified key
 	.removeNativeKeys // functions; disables these keys
+	.freezeKeys // function; marks table as read-only; no keys can be written to
 function:
 	[none]
 null:

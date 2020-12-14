@@ -85,6 +85,10 @@ Vector.castTo = function (NewType) {
 
 
 
+Vector.freezeKeys();
+
+
+
 
 var ExampleVector1 = Vector.new ({2, 5});
 var ExampleVector2 = Vector.new ({3, 9});
