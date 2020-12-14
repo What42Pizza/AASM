@@ -77,7 +77,9 @@ string type (DV In) // gives the type of data being held by the input. the outpu
 	string
 	table
 	function
-	enviroment
+	intarray
+	floatarray
+	stringarray
 	null
 
 null setType (DV In, string NewType) // sets the type of In to NewType. if NewType is an existing data type, it will also cast In to that data type
