@@ -85,7 +85,7 @@ public class DV implements Cloneable {
   
   
   
-  public void WhenWrittenTo (DV NewDV) {
+  public void SetTo (DV NewDV) {
     ForgetValue(); // save on some memory
     ValueType = NewDV.ValueType;
     switch (ValueType) {
@@ -133,7 +133,7 @@ public class DV implements Cloneable {
   
   
   
-  DV WhenIndexed (DV Key) {
+  DV GetIndex (DV Key) {
     
     if (Key.ValueType == ValueTypes.T_String) {
       if (Key.StringValue.equals("castTo")) return null; // this needs to be a function
@@ -426,20 +426,6 @@ public class DV implements Cloneable {
         return false;
       
     }
-  }
-  
-  
-  
-  
-  
-  void SetTo (DV NewDV) {
-    WhenWrittenTo (NewDV);
-  }
-  
-  
-  
-  DV GetIndex (DV Key) {
-    return WhenIndexed (Key);
   }
   
   
