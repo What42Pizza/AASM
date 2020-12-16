@@ -52,18 +52,21 @@ intarray:
 	.find   // function; takes int as arg and returns the first found index that holds that int; errors if no int given
 	.insert // function; takes int and optional second int as args, inserts int at specified pos or end; errors if no int given
 	.remove // function; takes optional int as arg, removes and returns the int at specified pos or end; errors if anything but int or null given as arg
+	[int Index] // int; int at pos Index
 floatarray:
 	.length // int; length of array
 	.sub    // function; takes either 1 or 2 ints, returns subset of array; errors if no ints given
 	.find   // function; takes float as arg and returns the first found index that holds that float; errors if no float given
 	.insert // function; takes float and optional int as args, inserts float at specified pos or end; errors if no float given
 	.remove // function; takes optional int as arg, removes and returns the float at specified pos or end; errors if anything but int or null given as arg
+	[int Index] // float; float at pos Index
 stringarray:
 	.length // int; length of array
 	.sub    // function; takes either 1 or 2 ints, returns subset of array; errors if no ints given
 	.find   // function; takes string as arg and returns the first found index that holds that string; errors if no string given
 	.insert // function; takes string and optional int as args, inserts string at specified pos or end; errors if no string given
 	.remove // function; takes optional int as arg, removes and returns the string at specified pos or end; errors if anything but int or null given as arg
+	[int Index] // string; string at pos Index
 null:
 	[none]
 all:
