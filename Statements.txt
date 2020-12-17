@@ -31,14 +31,14 @@ var [name] = [value];
 
 
 
-[name] ();
+[value] ();
 
-   calls the function named [name] (/ jumps to function labeled as [name])
+   calls the function stored in [value] (/ jumps to function labeled as [name])
 
-[name] ([args]...);
+[value] ([args]...);
 
    level 3 only
-   calls the function named [name] with the specifies arguments
+   calls the function stored in [value] with the specifies arguments
 
 
 
@@ -158,16 +158,18 @@ OV // in-place operator w/ value
 
 
 
-[Var Name] ();
+[Value] ();
 
 C // call function
+[Value] // function to call
 // only level 1 and 2
 
 
 
-[Var Name] ([ARGS]);
+[Value] ([ARGS]);
 
 C // call function
+[Value] // function to call
 [Value] // table; args
 // only level 3
 

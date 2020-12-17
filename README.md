@@ -1,6 +1,6 @@
 # AASM
 ### Advanced Assembly
-### V0.1.0
+### V0.1.1
 
 <br />
 <br />
@@ -95,4 +95,4 @@ function Factorial (Num) {
 
 Started: 11/28/20
 
-Last updated: 12/16/20
+Last updated: 12/17/20

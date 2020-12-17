@@ -35,4 +35,10 @@ final public static class ValueTypes {
     N_StringArray,
   };
   
+  final static String GetName (int ValueType) {
+    if (ValueType < 0) return "Internal Error in GetName(): ValueType " + ValueType + " cannot be negative";
+    if (ValueType >= TypeNames.length) return "Internal Error in GetName(): ValueType " + ValueType + " is too high";
+    return TypeNames[ValueType];
+  }
+  
 }
