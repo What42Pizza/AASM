@@ -7,7 +7,7 @@ public class DV implements Cloneable {
   // Vars
   
   int IntValue = 0;
-  float FloatValue = 0;
+  float FloatValue = 0.0;
   boolean BoolValue = false;
   String StringValue = null;
   ArrayList <DV> TableValue = null;
@@ -18,7 +18,13 @@ public class DV implements Cloneable {
   
   int ValueType;
   
-  DV THIS; // Used for THIS constant in functions
+  DV THIS; // Used for the THIS constant in functions
+  String CustomType = null;
+  
+  
+  
+  
+  
   
   
   
@@ -55,7 +61,7 @@ public class DV implements Cloneable {
     this.TableValue = TableValue;
   }
   
-  public DV (int LabelFunctionValue, boolean ThisIsLabelFunctionValueButICantHaveAnotherIntConstructorSo) {
+  public DV (int LabelFunctionValue, boolean ThisIsALabelFunctionValueButICantHaveAnotherIntConstructorSo) {
     ValueType = ValueTypes.T_LabelFunction;
     this.LabelFunctionValue = LabelFunctionValue;
   }
@@ -83,7 +89,8 @@ public class DV implements Cloneable {
   
   
   
-  // Custom functions
+  
+  // Overridable functions
   
   
   
@@ -135,8 +142,9 @@ public class DV implements Cloneable {
   
   
   
-  DV CallAsFunction (ArrayList <DV> Args) {
+  ArrayList <DV> CallAsFunction (ArrayList <DV> Args) {
     // pretend this is interacting with the interpreter
+    return null;
   }
   
   
@@ -383,6 +391,187 @@ public class DV implements Cloneable {
   
   
   
+  DV CastTo (String NewType) {
+    //if (.castTo has changed) tell interpreter to do castTo stuff
+    switch (NewType) {
+      
+      case (ValueTypes.N_Null):
+        return new DV();
+      
+      case (ValueTypes.N_Int):
+        return CastToInt();
+      
+      case (ValueTypes.N_Float):
+        return CastToFloat();
+      
+      case (ValueTypes.N_Bool):
+        return CastToBool();
+      
+      default:
+        if (CustomType == null) {
+          println ("Error: cannot cast " + ValueTypes.TypeNames[ValueType] + " to " + NewType);
+          return new DV();
+        } else {
+          println ("Error: cannot cast " + CustomType + " to " + NewType);
+          return new DV();
+        }
+      
+    }
+  }
+  
+  
+  
+  
+  
+  DV CastToInt() {
+    switch (ValueType) {
+      
+      case (ValueTypes.T_Null):
+        return new DV (0);
+      
+      case (ValueTypes.T_Int):
+        return new DV (IntValue);
+      
+      case (ValueTypes.T_Float):
+        return new DV ((int) FloatValue);
+      
+      case (ValueTypes.T_Bool):
+        return new DV (BoolValue ? 1 : 0);
+      
+      case (ValueTypes.T_String):
+        try {
+          return new DV (Integer.parseInt(StringValue));
+        } catch (NumberFormatException e) { // If StringValue cannot be cast, return 0
+          return new DV (0);
+        }
+      
+      case (ValueTypes.T_Table):
+        return new DV (TableValue.size() / 2);
+      
+      case (ValueTypes.T_LabelFunction):
+        return new DV (0);
+      
+      case (ValueTypes.T_IntArray):
+        return new DV (IntArray.size() / 2);
+      
+      case (ValueTypes.T_FloatArray):
+        return new DV (FloatArray.size() / 2);
+      
+      case (ValueTypes.T_StringArray):
+        return new DV (StringArray.size() / 2);
+      
+      default:
+        println ("Internal Error: ValueType " + ValueType + " is not recognised");
+        return new DV();
+      
+    }
+  }
+  
+  
+  
+  
+  
+  DV CastToFloat() {
+    switch (ValueType) {
+      
+      case (ValueTypes.T_Null):
+        return new DV (0.0);
+      
+      case (ValueTypes.T_Int):
+        return new DV ((float) IntValue);
+      
+      case (ValueTypes.T_Float):
+        return new DV (FloatValue);
+      
+      case (ValueTypes.T_Bool):
+        return new DV (BoolValue ? 1.0 : 0.0);
+      
+      case (ValueTypes.T_String):
+        try {
+          return new DV (Float.parseFloat(StringValue));
+        } catch (NumberFormatException e) { // If StringValue cannot be cast, return 0.0
+          return new DV (0.0);
+        }
+      
+      case (ValueTypes.T_Table):
+        return new DV (TableValue.size() / 2.0);
+      
+      case (ValueTypes.T_LabelFunction):
+        return new DV (0.0);
+      
+      case (ValueTypes.T_IntArray):
+        return new DV (IntArray.size() / 2.0);
+      
+      case (ValueTypes.T_FloatArray):
+        return new DV (FloatArray.size() / 2.0);
+      
+      case (ValueTypes.T_StringArray):
+        return new DV (StringArray.size() / 2.0);
+      
+      default:
+        println ("Internal Error: ValueType " + ValueType + " is not recognised");
+        return new DV();
+      
+    }
+  }
+  
+  
+  
+  
+  
+  DV CastToBool() {
+    switch (ValueType) {
+      
+      case (ValueTypes.T_Null):
+        return new DV (false);
+      
+      case (ValueTypes.T_Int):
+        return new DV (true);
+      
+      case (ValueTypes.T_Float):
+        return new DV (true);
+      
+      case (ValueTypes.T_Bool):
+        return new DV (BoolValue);
+      
+      case (ValueTypes.T_String):
+        try {
+          return new DV (Boolean.parseBoolean(StringValue));
+        } catch (NumberFormatException e) { // If StringValue cannot be cast, return false
+          return new DV (false);
+        }
+      
+      case (ValueTypes.T_Table):
+        return new DV (true);
+      
+      case (ValueTypes.T_LabelFunction):
+        return new DV (true);
+      
+      case (ValueTypes.T_IntArray):
+        return new DV (true);
+      
+      case (ValueTypes.T_FloatArray):
+        return new DV (true);
+      
+      case (ValueTypes.T_StringArray):
+        return new DV (true);
+      
+      default:
+        println ("Internal Error: ValueType " + ValueType + " is not recognised");
+        return new DV();
+      
+    }
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   boolean Equals (DV OtherDV) {
     if (ValueType != OtherDV.ValueType) return false;
     if (ValueType == ValueTypes.T_Null) return true;
@@ -442,7 +631,7 @@ public class DV implements Cloneable {
   
   
   
-  void ForgetValue() { // DOES NOT RESET VALUE TYPE!!!!!!!!!!!!!!!!!!!
+  void ForgetValue() { // DOES NOT RESET VALUETYPE!!!!!!!!!!!!!!!!!!!
     switch (ValueType) {
       
       case (ValueTypes.T_String):
@@ -469,15 +658,6 @@ public class DV implements Cloneable {
   }
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  // Other functions
   
   
   

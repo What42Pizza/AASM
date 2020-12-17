@@ -11,17 +11,28 @@ final public static class ValueTypes {
   final static int T_FloatArray = 8;
   final static int T_StringArray = 9;
   
+  final static String N_Null = "null";
+  final static String N_Int = "int";
+  final static String N_Float = "float";
+  final static String N_Bool = "bool";
+  final static String N_String = "string";
+  final static String N_Table = "table";
+  final static String N_LabelFunction = "function";
+  final static String N_IntArray = "intarray";
+  final static String N_FloatArray = "floatarray";
+  final static String N_StringArray = "stringarray";
+  
   final static String[] TypeNames = {
-    "null",
-    "int",
-    "float",
-    "bool",
-    "string",
-    "table",
-    "function",
-    "intarray",
-    "floatarray",
-    "stringarray",
+    N_Null,
+    N_Int,
+    N_Float,
+    N_Bool,
+    N_String,
+    N_Table,
+    N_LabelFunction,
+    N_IntArray,
+    N_FloatArray,
+    N_StringArray,
   };
   
 }

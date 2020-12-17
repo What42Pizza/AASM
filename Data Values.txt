@@ -32,6 +32,7 @@ string:
 	.sub    // function; takes either 1 or 2 ints, return substring; errors if no ints given
 	.find   // function; takes string as first arg as a pattern and an optional int as the second arg, returns index of the found pattern or null if pattern not found; errors if string not given
 	.chatAt // function; takes int as first arg, returns character at index; errors if int not given
+	.isNum  // function; return whether this string could be cast as a num
 	[int Index] // string; returns char at index Index
 table:
 	.length // int; length of table
