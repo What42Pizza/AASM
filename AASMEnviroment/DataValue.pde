@@ -18,6 +18,9 @@ public class DV implements Cloneable {
   
   int ValueType;
   
+  boolean UsesCustomFunction = false;
+  DV THIS; // Used for THIS constant in functions
+  
   
   
   
@@ -127,6 +130,14 @@ public class DV implements Cloneable {
         return;
       
     }
+  }
+  
+  
+  
+  
+  
+  DV CustomFunction (ArrayList <DV> Args) {
+    
   }
   
   
