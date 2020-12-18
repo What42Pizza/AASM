@@ -18,8 +18,8 @@ public class DV implements Cloneable {
   
   int ValueType;
   
-  DV THIS; // Used for the THIS constant in functions
   String CustomType = null;
+  boolean HasNativeKeys = true;
   
   
   
@@ -142,7 +142,7 @@ public class DV implements Cloneable {
   
   
   
-  ArrayList <DV> CallAsFunction (ArrayList <DV> Args) {
+  public ArrayList <DV> CallAsFunction (ArrayList <DV> Args) {
     // pretend this is interacting with the interpreter
     return null;
   }
@@ -151,7 +151,7 @@ public class DV implements Cloneable {
   
   
   
-  DV GetIndex (DV Key) {
+  public DV GetIndex (DV Key) {
     
     if (Key.ValueType == ValueTypes.T_String) {
       if (Key.StringValue.equals("castTo")) return null; // this needs to be a function
@@ -239,27 +239,31 @@ public class DV implements Cloneable {
         switch (Key.ValueType) {
           
           case (ValueTypes.T_String):
-            switch (Key.StringValue) {
-              case ("length"):
-                return new DV (TableValue.size());
-              case ("sub"):
-                return null; // this needs to be a function
-              case ("find"):
-                return null; // this needs to be a function
-              case ("keys"):
-                return GetKeysAsTable();
-              case ("insert"):
-                return null; // this needs to be a function
-              case ("remove"):
-                return null; // this needs to be a function
-              case ("onOperation"):
-                return null; // ???????????????
-              case ("removeNativeKeys"):
-                return null; // this needs to be a function
-              case ("freezeKeys"):
-                return null; // this needs to be a function
-              default:
-                return GetTableValue (Key);
+            if (HasNativeKeys) {
+              switch (Key.StringValue) {
+                case ("length"):
+                  return new DV (TableValue.size());
+                case ("sub"):
+                  return null; // this needs to be a function
+                case ("find"):
+                  return null; // this needs to be a function
+                case ("keys"):
+                  return GetKeysAsTable();
+                case ("insert"):
+                  return null; // this needs to be a function
+                case ("remove"):
+                  return null; // this needs to be a function
+                case ("onOperation"):
+                  return null; // ???????????????
+                case ("removeNativeKeys"):
+                  return null; // this needs to be a function
+                case ("freezeKeys"):
+                  return null; // this needs to be a function
+                default:
+                  return GetTableValue (Key);
+              }
+            } else {
+              return GetTableValue (Key);
             }
           
           case (ValueTypes.T_Int):
@@ -419,6 +423,9 @@ public class DV implements Cloneable {
       case (ValueTypes.N_IntArray):
         return CastToIntArray();
       
+      case (ValueTypes.N_FloatArray):
+        return CastToFloatArray();
+      
       default:
         if (CustomType == null) {
           println ("Error: cannot cast " + ValueTypes.TypeNames[ValueType] + " to " + NewType);
@@ -484,6 +491,54 @@ public class DV implements Cloneable {
   
   
   
+  Integer CastToIntExplicit() {
+    switch (ValueType) {
+      
+      case (ValueTypes.T_Null):
+        return null;
+      
+      case (ValueTypes.T_Int):
+        return IntValue;
+      
+      case (ValueTypes.T_Float):
+        return (int) FloatValue;
+      
+      case (ValueTypes.T_Bool):
+        return BoolValue ? 1 : 0;
+      
+      case (ValueTypes.T_String):
+        try {
+          return Integer.parseInt(StringValue);
+        } catch (NumberFormatException e) { // If StringValue cannot be cast, return 0
+          return null;
+        }
+      
+      case (ValueTypes.T_Table):
+        return null;
+      
+      case (ValueTypes.T_LabelFunction):
+        return null;
+      
+      case (ValueTypes.T_IntArray):
+        return null;
+      
+      case (ValueTypes.T_FloatArray):
+        return null;
+      
+      case (ValueTypes.T_StringArray):
+        return null;
+      
+      default:
+        println ("Internal Error in CastToIntExplicit(): ValueType " + ValueType + " is not recognised");
+        return null;
+      
+    }
+  }
+  
+  
+  
+  
+  
   DV CastToFloat() {
     switch (ValueType) {
       
@@ -525,6 +580,54 @@ public class DV implements Cloneable {
       default:
         println ("Internal Error in CastToFloat(): ValueType " + ValueType + " is not recognised");
         return new DV();
+      
+    }
+  }
+  
+  
+  
+  
+  
+  Float CastToFloatExplicit() {
+    switch (ValueType) {
+      
+      case (ValueTypes.T_Null):
+        return null;
+      
+      case (ValueTypes.T_Int):
+        return (float) IntValue;
+      
+      case (ValueTypes.T_Float):
+        return FloatValue;
+      
+      case (ValueTypes.T_Bool):
+        return BoolValue ? 1.0 : 0.0;
+      
+      case (ValueTypes.T_String):
+        try {
+          return Float.parseFloat(StringValue);
+        } catch (NumberFormatException e) { // If StringValue cannot be cast, return 0.0
+          return null;
+        }
+      
+      case (ValueTypes.T_Table):
+        return null;
+      
+      case (ValueTypes.T_LabelFunction):
+        return null;
+      
+      case (ValueTypes.T_IntArray):
+        return null;
+      
+      case (ValueTypes.T_FloatArray):
+        return null;
+      
+      case (ValueTypes.T_StringArray):
+        return null;
+      
+      default:
+        println ("Internal Error in CastToFloat(): ValueType " + ValueType + " is not recognised");
+        return null;
       
     }
   }
@@ -682,7 +785,7 @@ public class DV implements Cloneable {
   
   DV CastToFunction() {
     if (ValueType == ValueTypes.T_LabelFunction) return new DV (LabelFunctionValue, true);
-    println ("Error: cannot cast " + ValueType + " to function");
+    println ("Error: cannot cast " + ValueTypes.GetName(ValueType) + " to function");
     return new DV();
   }
   
@@ -718,7 +821,7 @@ public class DV implements Cloneable {
         }
       
       case (ValueTypes.T_Table):
-        return new DV (TableValue);
+        return ConvertTableToIntArray();
       
       case (ValueTypes.T_LabelFunction):
         println ("Error: cannot cast function to intarray");
@@ -734,7 +837,61 @@ public class DV implements Cloneable {
         return ConvertStringArrayToIntArray();
       
       default:
-        println ("Internal Error in CastToString(): ValueType " + ValueType + " is not recognised");
+        println ("Internal Error in CastToIntArray(): ValueType " + ValueType + " is not recognised");
+        return new DV();
+      
+    }
+  }
+  
+  
+  
+  
+  
+  DV CastToFloatArray() {
+    ArrayList <Float> Output = new ArrayList <Float> ();
+    switch (ValueType) {
+      
+      case (ValueTypes.T_Null):
+        return new DV (Output, 0.0);
+      
+      case (ValueTypes.T_Int):
+        for (int i = 0; i < IntValue; i ++) {Output.add(0.0);}
+        return new DV (Output, 0.0);
+      
+      case (ValueTypes.T_Float):
+        for (int i = 0; i < floor(FloatValue); i ++) {Output.add(0.0);}
+        return new DV (Output, 0.0);
+      
+      case (ValueTypes.T_Bool):
+        Output.add(BoolValue ? 1.0 : 0.0);
+        return new DV (Output, 0.0);
+      
+      case (ValueTypes.T_String):
+        try {
+          Output.add(Float.parseFloat(StringValue));
+          return new DV (Output, 0.0);
+        } catch (NumberFormatException e) {
+          return new DV (Output, 0.0);
+        }
+      
+      case (ValueTypes.T_Table):
+        return ConvertTableToFloatArray();
+      
+      case (ValueTypes.T_LabelFunction):
+        println ("Error: cannot cast function to floatarray");
+        return new DV (Output, 0.0);
+      
+      case (ValueTypes.T_IntArray):
+        return ConvertIntArrayToFloatArray();
+      
+      case (ValueTypes.T_FloatArray):
+        return new DV (FloatArray, 0.0);
+      
+      case (ValueTypes.T_StringArray):
+        return ConvertStringArrayToFloatArray();
+      
+      default:
+        println ("Internal Error in CastToFloatArray(): ValueType " + ValueType + " is not recognised");
         return new DV();
       
     }
@@ -954,6 +1111,37 @@ public class DV implements Cloneable {
   
   
   
+  DV ConvertTableToIntArray() {
+    if (ValueType != ValueTypes.T_Table) {println ("Internal Error in ConvertTableToIntArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <Integer> (), 0);}
+    ArrayList <Integer> Output = new ArrayList <Integer> ();
+    for (int i = 0; i < TableValue.size(); i += 2) {
+      DV V = TableValue.get(i);
+      
+      switch (V.ValueType) {
+        case (ValueTypes.T_Table):
+          Output.addAll(V.ConvertTableToIntArray().IntArray);
+          break;
+        case (ValueTypes.T_IntArray):
+          Output.addAll(V.IntArray);
+          break;
+        case (ValueTypes.T_FloatArray):
+          Output.addAll(V.ConvertFloatArrayToIntArray().IntArray);
+          break;
+        case (ValueTypes.T_StringArray):
+          Output.addAll(V.ConvertStringArrayToIntArray().IntArray);
+          break;
+        default:
+          Integer NewInt = V.CastToIntExplicit();
+          if (NewInt != null) Output.add(NewInt);
+          break;
+      }
+      
+    }
+    return new DV (Output, 0);
+  }
+  
+  
+  
   DV ConvertFloatArrayToIntArray() {
     if (ValueType != ValueTypes.T_FloatArray) {println ("Internal Error in ConvertFloatArrayToIntArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <Integer> (), 0);}
     ArrayList <Integer> Output = new ArrayList <Integer> ();
@@ -973,7 +1161,62 @@ public class DV implements Cloneable {
         Output.add(Integer.parseInt(S));
       } catch (NumberFormatException e) {}
     }
-    return new DV (Output,  0);
+    return new DV (Output, 0);
+  }
+  
+  
+  
+  DV ConvertTableToFloatArray() {
+    if (ValueType != ValueTypes.T_Table) {println ("Internal Error in ConvertTableToFloatArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <Float> (), 0.0);}
+    ArrayList <Float> Output = new ArrayList <Float> ();
+    for (int i = 0; i < TableValue.size(); i += 2) {
+      DV V = TableValue.get(i);
+      
+      switch (V.ValueType) {
+        case (ValueTypes.T_Table):
+          Output.addAll(V.ConvertTableToFloatArray().FloatArray);
+          break;
+        case (ValueTypes.T_IntArray):
+          Output.addAll(V.ConvertIntArrayToFloatArray().FloatArray);
+          break;
+        case (ValueTypes.T_FloatArray):
+          Output.addAll(V.FloatArray);
+          break;
+        case (ValueTypes.T_StringArray):
+          Output.addAll(V.ConvertStringArrayToFloatArray().FloatArray);
+          break;
+        default:
+          Float NewFloat = V.CastToFloatExplicit();
+          if (NewFloat != null) Output.add(NewFloat);
+          break;
+      }
+      
+    }
+    return new DV (Output, 0.0);
+  }
+  
+  
+  
+  DV ConvertIntArrayToFloatArray() {
+    if (ValueType != ValueTypes.T_IntArray) {println ("Internal Error in ConvertIntArrayToFloatArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <Float> (), 0.0);}
+    ArrayList <Float> Output = new ArrayList <Float> ();
+    for (int I : IntArray) {
+      Output.add((float) I);
+    }
+    return new DV (Output, 0.0);
+  }
+  
+  
+  
+  DV ConvertStringArrayToFloatArray() {
+    if (ValueType != ValueTypes.T_StringArray) {println ("Internal Error in ConvertStringArrayToStringArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <Float> (), 0.0);}
+    ArrayList <Float> Output = new ArrayList <Float> ();
+    for (String S : StringArray) {
+      try {
+        Output.add(Float.parseFloat(S));
+      } catch (NumberFormatException e) {}
+    }
+    return new DV (Output, 0.0);
   }
   
   
