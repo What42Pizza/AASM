@@ -280,6 +280,15 @@ F(
 
 GR // get return value
 [Int] // number of functions
-[Value; Type=Function] // function to call
+[Value; Type=function] // function to call
 ...
-// this is used before other [Value]s that contain functions
+// only levl 1 and 2, this is used before other [Value]s that contain functions
+
+
+
+GR
+[Int] // funber of functions
+[Value; Type=function] // function to call
+[Value], ... // args for function
+...
+// only level 3, this is used before other [Value]s that contain functions

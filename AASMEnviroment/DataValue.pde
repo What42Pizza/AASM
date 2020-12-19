@@ -12,6 +12,7 @@ public class DV implements Cloneable {
   String StringValue = null;
   ArrayList <DV> TableValue = null;
   int LabelFunctionValue = -1;
+  ArrayList <DV> ArrayValue = null;
   ArrayList <Integer> IntArray = null;
   ArrayList <Float> FloatArray = null;
   ArrayList <String> StringArray = null;
@@ -66,7 +67,12 @@ public class DV implements Cloneable {
     this.LabelFunctionValue = LabelFunctionValue;
   }
   
-  public DV (ArrayList <Integer> IntArray, int ThisIsIntArrayButTheresAlreadyAnArrayList) {
+  public DV (ArrayList <DV> ArrayValue, DV ThisIsANormalArrayButTheresAlreadyAnArrayList) {
+    ValueType = ValueTypes.T_Array;
+    this.ArrayValue = ArrayValue;
+  }
+  
+  public DV (ArrayList <Integer> IntArray, int WhyDoIStillHaveToAddTheseThisIsntEvenTheSameArrayList) {
     ValueType = ValueTypes.T_IntArray;
     this.IntArray = IntArray;
   }
@@ -123,6 +129,10 @@ public class DV implements Cloneable {
         LabelFunctionValue = NewDV.LabelFunctionValue;
         return;
       
+      case (ValueTypes.T_Array):
+        ArrayValue = NewDV.ArrayValue;
+        return;
+      
       case (ValueTypes.T_IntArray):
         IntArray = NewDV.IntArray;
         return;
@@ -142,9 +152,9 @@ public class DV implements Cloneable {
   
   
   
-  public ArrayList <DV> CallAsFunction (ArrayList <DV> Args) {
+  public DV CallAsFunction (ArrayList <DV> Args) {
     // pretend this is interacting with the interpreter
-    ArrayList <DV> OutputOfInterpreter = null;
+    DV OutputOfInterpreter = null;
     return OutputOfInterpreter;
   }
   
@@ -155,11 +165,21 @@ public class DV implements Cloneable {
   public DV GetIndex (DV Key) {
     
     if (Key.ValueType == ValueTypes.T_String) {
-      if (Key.StringValue.equals("castTo")) return NativeFunctions.DV_CastTo;
-      if (Key.StringValue.equals("clone")) {try {return (DV) this.clone();} catch (Exception e) {println ("Internal Error: could not clone this DV: " + e); return new DV();}} // I'm not sure if I need the extra brackets, but there seems to be two statements so I think they might be necessary
+      switch (Key.StringValue) {
+        case ("castTt"):
+          return NativeFunctions.DV_CastTo;
+        case ("clone"):
+          try {return (DV) this.clone();} catch (Exception e) {println ("Internal Error: could not clone DV: " + e); return new DV();}
+      }
     }
     
     switch (ValueType) {
+      
+      
+      
+      case (ValueTypes.T_Null):
+        println ("Error: cannot index null");
+        return new DV();
       
       
       
@@ -202,7 +222,7 @@ public class DV implements Cloneable {
       
       
       case (ValueTypes.T_Bool):
-        println ("Error: bool cannot be indexed");
+        println ("Error: cannot index bool");
         return new DV();
       
       
@@ -278,6 +298,42 @@ public class DV implements Cloneable {
       
       
       
+      case (ValueTypes.T_LabelFunction):
+        println ("Error: cannot index function");
+        return new DV();
+        
+      
+      
+      case (ValueTypes.T_Array):
+        switch (Key.ValueType) {
+          
+          case (ValueTypes.T_String):
+            switch (Key.StringValue) {
+              case ("length"):
+                return new DV (ArrayValue.size());
+              case ("sub"):
+                return null; // this needs to be a function
+              case ("find"):
+                return null; // this needs to be a function
+              case ("insert"):
+                return null; // this needs to be a function
+              case ("remove"):
+                return null; // this needs to be a function
+            }
+          
+          case (ValueTypes.T_Int):
+            if (Key.IntValue < 1) {println ("Error: cannot index this array with " + Key.IntValue + "; index is too low");}
+            if (Key.IntValue > IntArray.size()) {println ("Error: cannot index this array with " + Key.IntValue + "; length is " + ArrayValue.size());} // This isn't >= size() because it starts at 1 (index == size works)
+            return ArrayValue.get(Key.IntValue);
+          
+          default:
+            println ("Error: cannot index array with non-int, non-string value");
+            return new DV();
+          
+        }
+      
+      
+      
       case (ValueTypes.T_IntArray):
         switch (Key.ValueType) {
           
@@ -299,7 +355,7 @@ public class DV implements Cloneable {
           
           case (ValueTypes.T_Int):
             if (Key.IntValue < 1) {println ("Error: cannot index this intarray with " + Key.IntValue + "; index is too low");}
-            if (Key.IntValue > IntArray.size()) {println ("Error: cannot index this intarray with " + Key.IntValue + "; length is " + IntArray.size());} // This isn't >= size() because it starts at 1 (index == size works)
+            if (Key.IntValue > IntArray.size()) {println ("Error: cannot index this intarray with " + Key.IntValue + "; length is " + IntArray.size());}
             return new DV (IntArray.get(Key.IntValue));
           
           default:
@@ -421,6 +477,9 @@ public class DV implements Cloneable {
       case (ValueTypes.N_LabelFunction):
         return CastToFunction();
       
+      case (ValueTypes.N_Array):
+        return CastToArray();
+      
       case (ValueTypes.N_IntArray):
         return CastToIntArray();
       
@@ -475,14 +534,17 @@ public class DV implements Cloneable {
         println ("Error: cannot cast function to int");
         return new DV (0);
       
+      case (ValueTypes.T_Array):
+        return new DV (ArrayValue.size());
+      
       case (ValueTypes.T_IntArray):
-        return new DV (IntArray.size() / 2);
+        return new DV (IntArray.size());
       
       case (ValueTypes.T_FloatArray):
-        return new DV (FloatArray.size() / 2);
+        return new DV (FloatArray.size());
       
       case (ValueTypes.T_StringArray):
-        return new DV (StringArray.size() / 2);
+        return new DV (StringArray.size());
       
       default:
         println ("Internal Error in CastToInt(): ValueType " + ValueType + " is not recognised");
@@ -516,6 +578,9 @@ public class DV implements Cloneable {
         } catch (NumberFormatException e) { // If StringValue cannot be cast, return 0
           return null;
         }
+      
+      case (ValueTypes.T_Array):
+        return null;
       
       case (ValueTypes.T_Table):
         return null;
@@ -572,14 +637,17 @@ public class DV implements Cloneable {
         println ("Error: cannot cast function to float");
         return new DV (0.0);
       
+      case (ValueTypes.T_Array):
+        return new DV((float)ArrayValue.size());
+      
       case (ValueTypes.T_IntArray):
-        return new DV (IntArray.size() / 2.0);
+        return new DV ((float)IntArray.size());
       
       case (ValueTypes.T_FloatArray):
-        return new DV (FloatArray.size() / 2.0);
+        return new DV ((float)FloatArray.size());
       
       case (ValueTypes.T_StringArray):
-        return new DV (StringArray.size() / 2.0);
+        return new DV ((float)StringArray.size());
       
       default:
         println ("Internal Error in CastToFloat(): ValueType " + ValueType + " is not recognised");
@@ -618,6 +686,9 @@ public class DV implements Cloneable {
         return null;
       
       case (ValueTypes.T_LabelFunction):
+        return null;
+      
+      case (ValueTypes.T_Array):
         return null;
       
       case (ValueTypes.T_IntArray):
@@ -671,6 +742,9 @@ public class DV implements Cloneable {
       case (ValueTypes.T_LabelFunction):
         return new DV (true);
       
+      case (ValueTypes.T_Array):
+        return new DV (true);
+      
       case (ValueTypes.T_IntArray):
         return new DV (true);
       
@@ -715,6 +789,9 @@ public class DV implements Cloneable {
       case (ValueTypes.T_LabelFunction):
         return new DV ("function");
       
+      case (ValueTypes.T_Array):
+        return new DV (ConvertArrayToString());
+      
       case (ValueTypes.T_IntArray):
         return new DV (ConvertIntArrayToString());
       
@@ -757,6 +834,9 @@ public class DV implements Cloneable {
         return null;
       
       case (ValueTypes.T_LabelFunction):
+        return null;
+      
+      case (ValueTypes.T_Array):
         return null;
       
       case (ValueTypes.T_IntArray):
@@ -811,6 +891,9 @@ public class DV implements Cloneable {
         Output.add(new DV(LabelFunctionValue, true));
         return new DV (Output);
       
+      case (ValueTypes.T_Array):
+        return ConvertArrayToTable();
+      
       case (ValueTypes.T_IntArray):
         return ConvertIntArrayToTable();
       
@@ -835,6 +918,59 @@ public class DV implements Cloneable {
     if (ValueType == ValueTypes.T_LabelFunction) return new DV (LabelFunctionValue, true);
     println ("Error: cannot cast " + ValueTypes.GetName(ValueType) + " to function");
     return new DV();
+  }
+  
+  
+  
+  
+  
+  DV CastToArray() {
+    ArrayList <DV> Output = new ArrayList <DV> ();
+    switch (ValueType) {
+      
+      case (ValueTypes.T_Null):
+        return new DV (Output, null); // This shouldn't be able to call the constructor DV(ArrayList<String>, null), right?
+      
+      case (ValueTypes.T_Int):
+        for (int i = 0; i < IntValue; i ++) {Output.add(new DV());}
+        return new DV (Output, null);
+      
+      case (ValueTypes.T_Float):
+        for (int i = 0; i < floor(FloatValue); i ++) {Output.add(new DV());}
+        return new DV (Output, null);
+      
+      case (ValueTypes.T_Bool):
+        Output.add(BoolValue ? new DV(true) : new DV(false));
+        return new DV (Output, null);
+      
+      case (ValueTypes.T_String):
+        Output.add(new DV(StringValue));
+        return new DV(Output, null);
+      
+      case (ValueTypes.T_Table):
+        return ConvertTableToArray();
+      
+      case (ValueTypes.T_LabelFunction):
+        println ("Error: cannot cast function to array");
+        return new DV (Output, null);
+      
+      case (ValueTypes.T_Array):
+        return new DV (ArrayValue, null);
+      
+      case (ValueTypes.T_IntArray):
+        return ConvertIntArrayToArray();
+      
+      case (ValueTypes.T_FloatArray):
+        return ConvertFloatArrayToArray();
+      
+      case (ValueTypes.T_StringArray):
+        return ConvertStringArrayToArray();
+      
+      default:
+        println ("Internal Error in CastToArray(): ValueType " + ValueType + " is not recognised");
+        return new DV();
+      
+    }
   }
   
   
@@ -874,6 +1010,9 @@ public class DV implements Cloneable {
       case (ValueTypes.T_LabelFunction):
         println ("Error: cannot cast function to intarray");
         return new DV (Output, 0);
+      
+      case (ValueTypes.T_Array):
+        return ConvertArrayToIntArray();
       
       case (ValueTypes.T_IntArray):
         return new DV (IntArray, 0);
@@ -929,6 +1068,9 @@ public class DV implements Cloneable {
         println ("Error: cannot cast function to floatarray");
         return new DV (Output, 0.0);
       
+      case (ValueTypes.T_Array):
+        return ConvertArrayToFloatArray();
+      
       case (ValueTypes.T_IntArray):
         return ConvertIntArrayToFloatArray();
       
@@ -979,6 +1121,9 @@ public class DV implements Cloneable {
         println ("Error: cannot cast function to stringarray");
         return new DV (Output, "");
       
+      case (ValueTypes.T_Array):
+        return ConvertArrayToStringArray();
+      
       case (ValueTypes.T_IntArray):
         return ConvertIntArrayToStringArray();
       
@@ -1006,7 +1151,7 @@ public class DV implements Cloneable {
   
   boolean Equals (DV OtherDV) {
     if (ValueType != OtherDV.ValueType) return false;
-    if (ValueType == ValueTypes.T_Null) return true;
+    if (ValueType == ValueTypes.T_Null) return true; // Only reaches here if both are null
     switch (ValueType) {
       
       case (ValueTypes.T_Int):
@@ -1030,6 +1175,13 @@ public class DV implements Cloneable {
       
       case (ValueTypes.T_LabelFunction):
         return LabelFunctionValue == OtherDV.LabelFunctionValue;
+      
+      case (ValueTypes.T_Array):
+        if (ArrayValue.size() != OtherDV.ArrayValue.size()) return false;
+        for (int i = 0; i < ArrayValue.size(); i ++) {
+          if (!ArrayValue.get(i).Equals(OtherDV.ArrayValue.get(i))) return false;
+        }
+        return true;
       
       case (ValueTypes.T_IntArray):
         if (IntArray.size() != OtherDV.IntArray.size()) return false;
@@ -1072,6 +1224,10 @@ public class DV implements Cloneable {
       
       case (ValueTypes.T_Table):
         TableValue = null;
+        return;
+      
+      case (ValueTypes.T_Array):
+        ArrayValue = null;
         return;
       
       case (ValueTypes.T_IntArray):
@@ -1124,6 +1280,11 @@ public class DV implements Cloneable {
   
   
   
+  
+  
+  
+  
+  
   String ConvertTableToString() {
     if (ValueType != ValueTypes.T_Table) {println ("Internal Error in ConvertTableToString(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return "table to string errored";}
     if (TableValue.size() % 2 != 0) {println ("Internal Error in ConvertTableToString(): size of TableValue is odd"); return "table to string Errored";}
@@ -1137,12 +1298,24 @@ public class DV implements Cloneable {
   
   
   
+  String ConvertArrayToString() {
+    if (ValueType != ValueTypes.T_Array) {println ("Internal Error in ConvertArrayToString(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return "array to string errored";}
+    String Output = "{array: ";
+    if (ArrayValue.size() > 0) Output += ArrayValue.get(0);
+    for (int i = 0; i < ArrayValue.size(); i += 1) {
+      Output += ", " + i + ": " + ArrayValue.get(i);
+    }
+    return Output + "}";
+  }
+  
+  
+  
   String ConvertIntArrayToString() {
     if (ValueType != ValueTypes.T_IntArray) {println ("Internal Error in ConvertIntArrayToString(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return "intarray to string errored";}
     String Output = "{intarray: ";
     if (IntArray.size() > 0) Output += IntArray.get(0);
     for (int i = 0; i < IntArray.size(); i += 1) {
-      Output += ", " + IntArray.get(i);
+      Output += ", " + i + ": " + IntArray.get(i);
     }
     return Output + "}";
   }
@@ -1154,7 +1327,7 @@ public class DV implements Cloneable {
     String Output = "{foatarray: ";
     if (FloatArray.size() > 0) Output += FloatArray.get(0);
     for (int i = 0; i < FloatArray.size(); i += 1) {
-      Output += ", " + FloatArray.get(i);
+      Output += ", " + i + ": " + FloatArray.get(i);
     }
     return Output + "}";
   }
@@ -1166,9 +1339,21 @@ public class DV implements Cloneable {
     String Output = "{stringarray: ";
     if (StringArray.size() > 0) Output += StringArray.get(0);
     for (int i = 0; i < StringArray.size(); i += 1) {
-      Output += ", " + StringArray.get(i);
+      Output += ", " + i + ": " + StringArray.get(i);
     }
     return Output + "}";
+  }
+  
+  
+  
+  DV ConvertArrayToTable() {
+    if (ValueType != ValueTypes.T_Array) {println ("Internal Error in ConvertArrayToTable(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <DV> ());}
+    ArrayList <DV> Output = new ArrayList <DV> ();
+    for (int i = 0; i < ArrayValue.size(); i ++) {
+      Output.add(new DV (i+1));
+      Output.add(ArrayValue.get(i));
+    }
+    return new DV (Output);
   }
   
   
@@ -1209,6 +1394,72 @@ public class DV implements Cloneable {
   
   
   
+  DV ConvertTableToArray() {
+    if (ValueType != ValueTypes.T_Table) {println ("Internal Error in ConvertTableToArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <DV> (), null);}
+    ArrayList <DV> Output = new ArrayList <DV> ();
+    for (int i = 0; i < TableValue.size(); i += 2) {
+      DV V = TableValue.get(i);
+      
+      switch (V.ValueType) {
+        case (ValueTypes.T_Table):
+          Output.addAll(V.ConvertTableToArray().ArrayValue);
+          break;
+        case (ValueTypes.T_Array):
+          Output.addAll(V.ArrayValue);
+          break;
+        case (ValueTypes.T_IntArray):
+          Output.addAll(V.ConvertIntArrayToArray().ArrayValue);
+          break;
+        case (ValueTypes.T_FloatArray):
+          Output.addAll(V.ConvertFloatArrayToArray().ArrayValue);
+          break;
+        case (ValueTypes.T_StringArray):
+          Output.addAll(V.ConvertStringArrayToArray().ArrayValue);
+          break;
+        default:
+          Output.add(V);
+          break;
+      }
+      
+    }
+    return new DV (Output, null);
+  }
+  
+  
+  
+  DV ConvertIntArrayToArray() {
+    if (ValueType != ValueTypes.T_IntArray) {println ("Internal Error in ConvertIntArrayToArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <DV> (), null);}
+    ArrayList <DV> Output = new ArrayList <DV> ();
+    for (int I : IntArray) {
+      Output.add(new DV(I));
+    }
+    return new DV (Output, null);
+  }
+  
+  
+  
+  DV ConvertFloatArrayToArray() {
+    if (ValueType != ValueTypes.T_FloatArray) {println ("Internal Error in ConvertFloatArrayToArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <DV> (), null);}
+    ArrayList <DV> Output = new ArrayList <DV> ();
+    for (float F : FloatArray) {
+      Output.add(new DV(F));
+    }
+    return new DV (Output,  null);
+  }
+  
+  
+  
+  DV ConvertStringArrayToArray() {
+    if (ValueType != ValueTypes.T_StringArray) {println ("Internal Error in ConvertStringArrayToArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <DV> (), null);}
+    ArrayList <DV> Output = new ArrayList <DV> ();
+    for (String S : StringArray) {
+      Output.add(new DV(S));
+    }
+    return new DV (Output, null);
+  }
+  
+  
+  
   DV ConvertTableToIntArray() {
     if (ValueType != ValueTypes.T_Table) {println ("Internal Error in ConvertTableToIntArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <Integer> (), 0);}
     ArrayList <Integer> Output = new ArrayList <Integer> ();
@@ -1236,6 +1487,20 @@ public class DV implements Cloneable {
       
     }
     return new DV (Output, 0);
+  }
+  
+  
+  
+  DV ConvertArrayToIntArray() {
+    if (ValueType != ValueTypes.T_Array) {println ("Internal Error in ConvertArrayToIntArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <Integer> (), 0);}
+    ArrayList <Integer> Output = new ArrayList <Integer> ();
+    for (DV V : ArrayValue) {
+      Integer CastedInt = V.CastToIntExplicit();
+      if (CastedInt != null) {
+        Output.add(CastedInt);
+      }
+    }
+    return new DV (Output,  0);
   }
   
   
@@ -1295,6 +1560,20 @@ public class DV implements Cloneable {
   
   
   
+  DV ConvertArrayToFloatArray() {
+    if (ValueType != ValueTypes.T_Array) {println ("Internal Error in ConvertArrayToFloatArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <Float> (), 0.0);}
+    ArrayList <Float> Output = new ArrayList <Float> ();
+    for (DV V : ArrayValue) {
+      Float CastedFloat = V.CastToFloatExplicit();
+      if (CastedFloat != null) {
+        Output.add(CastedFloat);
+      }
+    }
+    return new DV (Output, 0.0);
+  }
+  
+  
+  
   DV ConvertIntArrayToFloatArray() {
     if (ValueType != ValueTypes.T_IntArray) {println ("Internal Error in ConvertIntArrayToFloatArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <Float> (), 0.0);}
     ArrayList <Float> Output = new ArrayList <Float> ();
@@ -1344,6 +1623,20 @@ public class DV implements Cloneable {
           break;
       }
       
+    }
+    return new DV (Output, "");
+  }
+  
+  
+  
+  DV ConvertArrayToStringArray() {
+    if (ValueType != ValueTypes.T_IntArray) {println ("Internal Error in ConvertArrayToStringArray(): cannot convert when ValueType is " + ValueTypes.GetName(ValueType)); return new DV (new ArrayList <String> (), "");}
+    ArrayList <String> Output = new ArrayList <String> ();
+    for (DV V : ArrayValue) {
+      String CastedString = V.CastToStringExplicit();
+      if (CastedString != null) {
+        Output.add(CastedString);
+      }
     }
     return new DV (Output, "");
   }

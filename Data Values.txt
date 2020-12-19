@@ -5,6 +5,7 @@ A Data Value is what is held by variables. There are 7 types of Data Values, whi
 	string
 	table
 	function / code block
+	array
 	intarray
 	floatarray
 	stringarray
@@ -47,6 +48,13 @@ table:
 	.lockTable // function; marks table as read-only; no keys can be written to
 function:
 	[none]
+array:
+	.length // int; length of array
+	.sub    // function; takes either 1 or 2 ints, returns subset of array; erros if no ints given
+	.find   // function; takes DV as arg and returns first found index of DV; errors if no DV given
+	.insert // function; takes DV and optional int as args, insert DV at specified pos or end; errors if no DV given
+	.remove // function; takes optional int as arg, removes and returns DV at specified pos or end; erros if anything but int or null given as args
+	[int Index] // DV; DV at pos Index
 intarray:
 	.length // int; length of array
 	.sub    // function; takes either 1 or 2 ints, returns subset of array; errors if no ints given

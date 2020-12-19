@@ -7,9 +7,10 @@ final public static class ValueTypes {
   final static int T_String = 4;
   final static int T_Table = 5;
   final static int T_LabelFunction = 6;
-  final static int T_IntArray = 7;
-  final static int T_FloatArray = 8;
-  final static int T_StringArray = 9;
+  final static int T_Array = 7;
+  final static int T_IntArray = 8;
+  final static int T_FloatArray = 9;
+  final static int T_StringArray = 10;
   
   final static String N_Null = "null";
   final static String N_Int = "int";
@@ -18,6 +19,7 @@ final public static class ValueTypes {
   final static String N_String = "string";
   final static String N_Table = "table";
   final static String N_LabelFunction = "function";
+  final static String N_Array = "array";
   final static String N_IntArray = "intarray";
   final static String N_FloatArray = "floatarray";
   final static String N_StringArray = "stringarray";
@@ -30,6 +32,7 @@ final public static class ValueTypes {
     N_String,
     N_Table,
     N_LabelFunction,
+    N_Array,
     N_IntArray,
     N_FloatArray,
     N_StringArray,

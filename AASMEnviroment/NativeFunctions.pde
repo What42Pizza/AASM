@@ -12,41 +12,38 @@ final public class NativeFunctions {
   
   
   
-  final public DV DV_CastTo = new DV (0, true) {@Override public ArrayList <DV> CallAsFunction (ArrayList <DV> Args) { // This function is run whenever DV.castTo() is called, so it returns the casted value
-    ArrayList <DV> Output = new ArrayList <DV> ();
-    if (Args.size() == 0) {println ("Error: cannot call .CastTo with zero arguments"); return Output;}
-    if (Args.size() > 1) {println ("Error: cannot call .CastTo with more than one argument"); return Output;}
-    if (Args.get(0).ValueType != ValueTypes.T_String) {println ("Error: cannot call .CastTo with non-string as first argument"); return Output;}
+  final public DV DV_CastTo = new DV (0, true) {@Override public DV CallAsFunction (ArrayList <DV> Args) { // This function is run whenever DV.castTo() is called, so it returns the casted value
+    if (Args.size() == 0) {println ("Error: cannot call .CastTo with zero arguments"); return new DV();}
+    if (Args.size() > 1) {println ("Error: cannot call .CastTo with more than one argument"); return new DV();}
+    if (Args.get(0).ValueType != ValueTypes.T_String) {println ("Error: cannot call .CastTo with non-string as first argument"); return new DV();}
     if (ValueOfTHIS.CustomType != null) {
       DV CustomCastFunction = ValueOfTHIS.GetTableValue(new DV("castTo"));
       // pretend this calls the interpreter
       DV ResultOfCastFunction = null;
-      Output.add(ResultOfCastFunction);
+      return ResultOfCastFunction;
     } else {
-      Output.add(ValueOfTHIS.CastTo(Args.get(0).StringValue));
+       return ValueOfTHIS.CastTo(Args.get(0).StringValue);
     }
-    return Output;
   }};
   
   
   
   
   
-  final public DV String_Sub = new DV (0, true) {@Override public ArrayList <DV> CallAsFunction (ArrayList <DV> Args) {
-    ArrayList <DV> Output = new ArrayList <DV> ();
-    if (ValueOfTHIS.ValueType != ValueTypes.T_String) {println ("Error: cannot call string.Sub on a non-string value"); return Output;}
-    for (DV V : Args) if (V.ValueType != ValueTypes.T_Int) {println ("Error: cannot call string.Sub with non-int values"); return Output;}
+  final public DV String_Sub = new DV (0, true) {@Override public DV CallAsFunction (ArrayList <DV> Args) {
+    if (ValueOfTHIS.ValueType != ValueTypes.T_String) {println ("Error: cannot call string.Sub on a non-string value"); return new DV();}
+    for (DV V : Args) if (V.ValueType != ValueTypes.T_Int) {println ("Error: cannot call string.Sub with non-int values"); return new DV();}
     switch (Args.size()) {
       case (0):
         println ("Error: cannot call string.Sub with zero arguments");
+        return new DV();
       case (1):
-        Output.add(new DV (ValueOfTHIS.StringValue.substring(Args.get(0).IntValue)));
-        return Output;
+        return new DV (ValueOfTHIS.StringValue.substring(Args.get(0).IntValue));
       case (2):
-        Output.add(new DV (ValueOfTHIS.StringValue.substring(Args.get(0).IntValue, Args.get(1).IntValue)));
+        return new DV (ValueOfTHIS.StringValue.substring(Args.get(0).IntValue, Args.get(1).IntValue));
       default:
         println ("Error: cannot call string.Sub with more than two arguments");
-        return Output;
+        return new DV();
     }
   }};
   
@@ -54,21 +51,23 @@ final public class NativeFunctions {
   
   
   
-  final public DV String_Find = new DV (0, true) {@Override public ArrayList <DV> CallAsFunction (ArrayList <DV> Args) {
-    ArrayList <DV> Output = new ArrayList <DV> ();
+  final public DV String_Find = new DV (0, true) {@Override public DV CallAsFunction (ArrayList <DV> Args) {
     int ArgsSize = Args.size();
-    if (ValueOfTHIS.ValueType != ValueTypes.T_String) {println ("Error: cannot call string.Find on a non-string value"); return Output;}
-    if (ArgsSize > 2) {println ("Error: cannot call string.Find with more than two arguments"); return Output;}
-    if (ArgsSize == 0) {println ("Error: cannot call string.Find with zero arguments"); return Output;}
-    if (Args.get(0).ValueType != ValueTypes.T_String) {println ("Error: cannot call string.Find with non-string value as first argument"); return Output;}
+    if (ValueOfTHIS.ValueType != ValueTypes.T_String) {println ("Error: cannot call string.Find on a non-string value"); return new DV();}
+    if (ArgsSize > 2) {println ("Error: cannot call string.Find with more than two arguments"); return new DV();}
+    if (ArgsSize == 0) {println ("Error: cannot call string.Find with zero arguments"); return new DV();}
+    if (Args.get(0).ValueType != ValueTypes.T_String) {println ("Error: cannot call string.Find with non-string value as first argument"); return new DV();}
     Integer FoundPos;
     if (ArgsSize == 1) {
       FoundPos = FindPatternInString (ValueOfTHIS.StringValue, Args.get(0).StringValue, 0);
     } else {
       FoundPos = FindPatternInString (ValueOfTHIS.StringValue, Args.get(0).StringValue, Args.get(0).IntValue);
     }
-    if (FoundPos != null) Output.add(new DV(FoundPos));
-    return Output;
+    if (FoundPos != null) {
+      return new DV(FoundPos);
+    } else {
+      return new DV();
+    }
   }};
   
   
@@ -100,11 +99,10 @@ final public class NativeFunctions {
   
   
   
-  final public DV String_CharAt = new DV (0, true) {@Override public ArrayList <DV> CallAsFunction (ArrayList <DV> Args) {
-    ArrayList <DV> Output = new ArrayList <DV> ();
-    if (ValueOfTHIS.ValueType != ValueTypes.T_String) {println ("Error: cannot call string.CharAt on a non-string value"); return Output;}
-    if (Args.size() == 0) {println ("Error: cannot call string.CharAt with zero arguments"); return Output;}
-    if (Args.size() > 1) {println ("Error: cannot call string.CharAt with more than one arguments"); return Output;}
+  final public DV String_CharAt = new DV (0, true) {@Override public DV CallAsFunction (ArrayList <DV> Args) {
+    if (ValueOfTHIS.ValueType != ValueTypes.T_String) {println ("Error: cannot call string.CharAt on a non-string value"); return new DV();}
+    if (Args.size() == 0) {println ("Error: cannot call string.CharAt with zero arguments"); return new DV();}
+    if (Args.size() > 1) {println ("Error: cannot call string.CharAt with more than one arguments"); return new DV();}
     DV IndexValue = Args.get(0);
     int Index;
     switch (IndexValue.ValueType) {
@@ -116,10 +114,9 @@ final public class NativeFunctions {
         break;
       default:
         println ("Error: cannot call string.CharAt with non-int, non-float as first argument");
-        return Output;
+        return new DV();
     }
-    Output.add(new DV(ValueOfTHIS.StringValue.charAt(Index) + ""));
-    return Output;
+    return new DV(ValueOfTHIS.StringValue.charAt(Index) + "");
   }};
   
   
