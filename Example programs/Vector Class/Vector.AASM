@@ -85,7 +85,7 @@ Vector.castTo = function (NewType) {
 
 
 
-Vector.freezeKeys();
+Vector.lockTable();
 
 
 

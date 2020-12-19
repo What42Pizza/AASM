@@ -44,7 +44,7 @@ table:
 	.onOperation // function; takes DV as first arg and string as second arg. by default, only works with ".." as second arg, and concats the first arg with the table; errors with incorrect args
 	[DV Key] // DV; returns value at specified key
 	.removeNativeKeys // functions; disables these keys
-	.freezeKeys // function; marks table as read-only; no keys can be written to
+	.lockTable // function; marks table as read-only; no keys can be written to
 function:
 	[none]
 intarray:
