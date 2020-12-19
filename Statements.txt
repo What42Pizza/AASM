@@ -105,6 +105,12 @@ jump to '[label name]';
 
 
 
+get_return_value [value];
+
+   internal
+
+
+
 
 
 
@@ -269,3 +275,11 @@ J // jump
 F(
 [Code]
 // only level 2 and 3, used at the start of a block to denote the names of the arguments for a function
+
+
+
+GR // get return value
+[Int] // number of functions
+[Value; Type=Function] // function to call
+...
+// this is used before other [Value]s that contain functions

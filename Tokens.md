@@ -80,9 +80,12 @@ return
 
 ```
 [Factorial_F points to here; no labels are left in the tokens]
+GR
+1
+pop
 V
 Num
-pop
+V1 // V[num here] is an internal constant that points to the previous GR. This makes it so the evaluator doesn't have to call the interpreter, and the interpreter's ExecuteCode function isn't recursive
 BN
 Num > 1
 0_else_0
@@ -90,8 +93,11 @@ P
 Num - 1
 C
 Factorial
+GR
+1
+pop // This is a function, but it doesn't just have to be the name of the function. For instance, if you had "return ExampTable.ExampFunction();", this would have GR; 1; ExampleTable.ExampleFunction; R; V1;
 R
-Num * pop
+Num * V1
 [0_else_0 points to here]
 R
 1
@@ -150,7 +156,7 @@ block MAIN:
 var
 Factorial
 =
-BLOCK_0
+B0 // B[num here] is an internal constant pointing to a code block
 ;
 
 
@@ -165,10 +171,10 @@ pop
 if (
 Num > 1
 )
-BLOCK_1
+B1
 ;
 else
-BLOCK_2
+B2
 ;
 
 
@@ -200,20 +206,23 @@ block MAIN:
 
 V
 Factorial
-BLOCK_0
+B0
 
 
 
 block 0:
 
+GR
+1
+pop
 V
 Num
-pop
+V1
 I
 Num > 1
-BLOCK_1
+B1
 E
-BLOCK_2
+B2
 
 
 
@@ -221,8 +230,11 @@ block 1:
 
 P
 Num - 1
+GR
+1
+Factorial
 R
-Num * Factorial()
+Num * V1
 
 
 
@@ -281,7 +293,7 @@ block MAIN:
 var
 Factorial
 =
-BLOCK_0
+B0
 ;
 
 
@@ -294,10 +306,10 @@ Num
 if (
 Num > 1
 )
-BLOCK_1
+B1
 ;
 else
-BLOCK_2
+B2
 ;
 
 
@@ -324,7 +336,7 @@ block MAIN:
 
 V
 Factorial
-BLOCK_0
+B0
 
 
 
@@ -335,15 +347,19 @@ Num
 )
 I
 Num > 1
-BLOCK_1
+B1
 E
-BLOCK_2
+B2
 
 
 
 block 1:
+GR
+1
+Factorial
+Num - 1 // Args for Factorial
 R
-Num * Factorial (Num - 1)
+Num * V1
 
 
 
