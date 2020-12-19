@@ -265,15 +265,15 @@ public class DV implements Cloneable {
                 case ("length"):
                   return new DV (TableValue.size());
                 case ("sub"):
-                  return null; // this needs to be a function
+                  return NativeFunctions.Table_Sub;
                 case ("find"):
-                  return null; // this needs to be a function
+                  return NativeFunctions.Table_Find;
                 case ("keys"):
                   return GetKeysAsTable();
                 case ("insert"):
-                  return null; // this needs to be a function
+                  return NativeFunctions.Table_Insert;
                 case ("remove"):
-                  return null; // this needs to be a function
+                  return NativeFunctions.Table_Remove;
                 case ("onOperation"):
                   return null; // ???????????????
                 case ("removeNativeKeys"):
