@@ -105,7 +105,7 @@ jump to '[label name]';
 
 
 
-get_return_value [value];
+get_return [value];
 
    internal
 

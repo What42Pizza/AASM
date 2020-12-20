@@ -5,9 +5,16 @@
 <br />
 <br />
 <br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
 ## Level 1:
 
+<br />
+<br />
 <br />
 
 ### Original function:
@@ -28,60 +35,202 @@ function Factorial:
 ```
 
 <br />
+<br />
+<br />
 
 ### After initial cleaning:
 
 ```
-#Factorial_F:
+funation Factorial:
 var Num = pop;
-if not (Num > 1) jump to '0_else_0';
+if not (Num > 1) jump to (else);
 push Num - 1;
-Factorial(); // adds "_F" when searching for the label
+Factorial();
 return Num * pop;
-#0_else_0:
+#else:
 return 1;
 ```
 
 <br />
+<br />
+<br />
 
-### Split into tokens:
+### Split each statement into its own line (no changes for this example)
+
+<br />
+<br />
+<br />
+
+### Redo certain parts:
 
 ```
-[Factorial_F points to here; no labels are left in the tokens]
+var 0_Factorial_F = function 2; // This just sets Factorial to a label (NOTICE THAT IT USED TO POINT TO LINE 1, BUT 0_else_0 IS THERE NOW)
+var 0_else_0 = function 9; // This also sets 'else' as a function (aka label) that points here to line 9 (return 1) (NOTICE THAT THIS WOULD POINT TO LINE 7 IF THE get_return-s WEREN't THERE)
+get_return pop;
+var Num = V1;
+if not (Num > 1) jump to (else);
+push Num - 1;
+0_Factorial_F();
+get_return pop;
+return Num * V1;
+return 1;
+```
+
+<br />
+<br />
+<br />
+
+### Split each line into tokens:
+
+```
+
+var
+0_Factorial_F
+=
+function
+2 // Points to line 2
+:
+
+var
+0_else_0
+=
+function
+9
+:
+
+// This is line 2
+
+get_retrun
+pop
+;
+
 var
 Num
 =
+V1
+;
+
+if
+not
+(
+Num
+>
+1
+)
+jump
+to
+(
+else
+)
+;
+
+push
+Num
+-
+1
+;
+
+0_Factorial_F
+(
+)
+;
+
+get_return
 pop
 ;
-if not (
-Num > 1
-) jump to '
-0_else_0
-'
-;
-push
-Num - 1 // These are kept as the same token so that the interpreter can more easily send it to the evaluator
-;
-Factorial
-()
-;
+
 return
-Num * pop
+Num
+*
+V1
 ;
-[0_else_0 points to here]
+
+// This is line 9
+
 return
 1
 ;
 ```
 
+<br />
+<br />
+<br />
+
+### Reassemble evaluator tokens:
+
+```
+
+var
+0_Factorial_F
+=
+function 2
+;
+
+var
+0_else_0
+=
+function 9
+;
+
+get_retrun
+pop
+;
+
+var
+Num
+=
+V1
+;
+
+if
+not
+(
+Num > 1
+)
+jump
+to
+(
+else
+)
+;
+
+push
+Num - 1
+;
+
+0_Factorial_F
+(
+)
+;
+
+get_return
+pop
+;
+
+return
+Num * V1
+;
+
+return
+1
+;
+```
+
+<br />
+<br />
 <br />
 
 ### Arranged into instructions:
 
 ```
-[Factorial_F points to here; no labels are left in the tokens]
+V
+0_Factorial_F // Define Factorial and else to be labels to lines 2 and 9
+function 2
+V
+0_else_0
+function 9
 GR
-1
+1 // This defines the number of functions to call; only pop is called so this is 1
 pop
 V
 Num
@@ -92,13 +241,12 @@ Num > 1
 P
 Num - 1
 C
-Factorial
+0_Factorial_F
 GR
 1
 pop // This is a function, but it doesn't just have to be the name of the function. For instance, if you had "return ExampTable.ExampFunction();", this would have GR; 1; ExampleTable.ExampleFunction; R; V1;
 R
 Num * V1
-[0_else_0 points to here]
 R
 1
 ```
@@ -108,9 +256,16 @@ R
 <br />
 <br />
 <br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
 ## Level 2:
 
+<br />
+<br />
 <br />
 
 ### Original function:
@@ -130,6 +285,8 @@ function Factorial {
 ```
 
 <br />
+<br />
+<br />
 
 ### After initial cleaning:
 
@@ -146,6 +303,8 @@ return 1;
 };
 ```
 
+<br />
+<br />
 <br />
 
 ### Split into tokens:
@@ -198,6 +357,8 @@ return
 ```
 
 <br />
+<br />
+<br />
 
 ### Arranged into instructions:
 
@@ -249,9 +410,16 @@ R
 <br />
 <br />
 <br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
 ## Level 3:
 
+<br />
+<br />
 <br />
 
 ### Original function:
@@ -269,6 +437,8 @@ function Factorial (Num) {
 ```
 
 <br />
+<br />
+<br />
 
 ### After initial cleaning:
 
@@ -283,6 +453,8 @@ return 1;
 };
 ```
 
+<br />
+<br />
 <br />
 
 ### Split into tokens:
@@ -327,6 +499,8 @@ return
 ;
 ```
 
+<br />
+<br />
 <br />
 
 ### Arranged into instructions:
