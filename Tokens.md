@@ -38,7 +38,7 @@ function Factorial:
 <br />
 <br />
 
-### After initial cleaning:
+### Initial cleaning:
 
 ```
 funation Factorial:
@@ -64,15 +64,13 @@ return 1;
 ### Redo certain parts:
 
 ```
-var 0_Factorial_F = function 2; // This just sets Factorial to a label (NOTICE THAT IT USED TO POINT TO LINE 1, BUT 0_else_0 IS THERE NOW)
-var 0_else_0 = function 9; // This also sets 'else' as a function (aka label) that points here to line 9 (return 1) (NOTICE THAT THIS WOULD POINT TO LINE 7 IF THE get_return-s WEREN't THERE)
-get_return pop;
-var Num = V1;
+var 0_Factorial_F = function; // This just sets Factorial to a label
+var Num = pop;
 if not (Num > 1) jump to (else);
 push Num - 1;
 0_Factorial_F();
-get_return pop;
-return Num * V1;
+return Num * pop;
+var 0_else_0 = function; // This also sets 'else' as a function (aka label)
 return 1;
 ```
 
@@ -88,26 +86,12 @@ var
 0_Factorial_F
 =
 function
-2 // Points to line 2
-:
-
-var
-0_else_0
-=
-function
-9
-:
-
-// This is line 2
-
-get_retrun
-pop
 ;
 
 var
 Num
 =
-V1
+pop
 ;
 
 if
@@ -135,17 +119,17 @@ Num
 )
 ;
 
-get_return
-pop
-;
-
 return
 Num
 *
-V1
+pop
 ;
 
-// This is line 9
+var
+0_else_0
+=
+function
+;
 
 return
 1
@@ -163,16 +147,66 @@ return
 var
 0_Factorial_F
 =
-function 2
+function
+;
+
+var
+Num
+=
+pop
+;
+
+if
+not
+(
+Num > 1
+)
+jump
+to
+(
+else
+)
+;
+
+push
+Num - 1
+;
+
+0_Factorial_F
+(
+)
+;
+
+return
+Num * pop
 ;
 
 var
 0_else_0
 =
-function 9
+function
 ;
 
-get_retrun
+return
+1
+;
+```
+
+<br />
+<br />
+<br />
+
+### Insert get_return-s:
+
+```
+
+var
+0_Factorial_F
+=
+function
+;
+
+get-return
 pop
 ;
 
@@ -211,6 +245,12 @@ return
 Num * V1
 ;
 
+var
+0_else_0
+=
+function
+;
+
 return
 1
 ;
@@ -220,7 +260,75 @@ return
 <br />
 <br />
 
-### Arranged into instructions:
+### Rework label vars:
+
+```
+
+var
+0_Factorial_F
+=
+function 2 // point to line 2
+;
+
+var
+0_else_0
+=
+function 9
+;
+
+// line 2
+
+get-return
+pop
+;
+
+var
+Num
+=
+V1
+;
+
+if
+not
+(
+Num > 1
+)
+jump
+to
+(
+else
+)
+;
+
+push
+Num - 1
+;
+
+0_Factorial_F
+(
+)
+;
+
+get_return
+pop
+;
+
+return
+Num * V1
+;
+
+// line 9
+
+return
+1
+;
+```
+
+<br />
+<br />
+<br />
+
+### Arrange into instructions:
 
 ```
 V
@@ -276,7 +384,8 @@ function Factorial {
 	
 	if (Num > 1) {
 		push Num - 1;
-		return Num * Factorial();
+		Factorial();
+		return Num * pop;
 	}; else {
 		return 1;
 	};
@@ -291,11 +400,12 @@ function Factorial {
 ### After initial cleaning:
 
 ```
-var Factorial = function {
+function Factorial {
 var Num = pop;
 if (Num > 1) {
 push Num - 1;
-return Num * Factorial();
+Factorial();
+return Num * pop;
 };
 else {
 return 1;
@@ -310,12 +420,112 @@ return 1;
 ### Split into tokens:
 
 ```
+function
+Factorial
+{
+var
+Num
+=
+pop
+;
+if
+(
+Num
+>
+1
+)
+{
+push
+Num
+-
+1
+;
+Factorial
+(
+)
+;
+return
+Num
+*
+pop
+;
+}
+;
+else
+{
+return
+1
+;
+}
+;
+}
+;
+```
+
+<br />
+<br />
+<br />
+
+### Redo certain parts:
+
+```
+var
+Factorial // This is the only thing that's changed
+=
+function
+{
+var
+Num
+=
+pop
+;
+if
+(
+Num
+>
+1
+)
+{
+push
+Num
+-
+1
+;
+Factorial
+(
+)
+;
+return
+Num
+*
+pop
+;
+}
+;
+else
+{
+return
+1
+;
+}
+;
+}
+;
+```
+
+<br />
+<br />
+<br />
+
+### Arrange into blocks:
+
+```
 block MAIN:
 
 var
 Factorial
 =
-B0 // B[num here] is an internal constant pointing to a code block
+B0 // B[num here] is evulated as a function that points to a certain block
 ;
 
 
@@ -327,8 +537,11 @@ Num
 =
 pop
 ;
-if (
-Num > 1
+if
+(
+Num
+>
+1
 )
 B1
 ;
@@ -341,10 +554,18 @@ B2
 block 1:
 
 push
-Num - 1
+Num
+-
+1
+;
+Factorial
+(
+)
 ;
 return
-Num * Factorial()
+Num
+*
+pop
 ;
 
 
@@ -360,14 +581,136 @@ return
 <br />
 <br />
 
-### Arranged into instructions:
+### Reassemble evaluator tokens:
+
+```
+block MAIN:
+
+var
+Factorial
+=
+B0
+;
+
+
+
+block 0:
+
+var
+Num
+=
+pop
+;
+if
+(
+Num > 1
+)
+B1
+;
+else
+B2
+;
+
+
+
+block 1:
+
+push
+Num - 1
+;
+Factorial
+(
+)
+;
+return
+Num * pop
+;
+
+
+
+block 2:
+
+return
+1
+;
+```
+
+<br />
+<br />
+<br />
+
+### Insert get_return-s:
+
+```
+block MAIN:
+
+var
+Factorial
+=
+B0
+;
+
+
+
+block 0:
+
+get_return
+pop
+;
+var
+Num
+=
+V1
+;
+if
+(
+Num > 1
+)
+B1
+;
+else
+B2
+;
+
+
+
+block 1:
+
+push
+Num - 1
+;
+Factorial
+(
+)
+;
+get-return
+pop
+;
+return
+Num * V1
+;
+
+
+
+block 2:
+
+return
+1
+;
+```
+
+<br />
+<br />
+<br />
+
+### Arrange into instructions:
 
 ```
 block MAIN:
 
 V
 Factorial
-B0
+Block 0
 
 
 
@@ -391,9 +734,11 @@ block 1:
 
 P
 Num - 1
+C
+Factorial
 GR
 1
-Factorial
+pop
 R
 Num * V1
 

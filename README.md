@@ -1,6 +1,6 @@
 # AASM
 ### Advanced Assembly
-### V0.1.1
+### V0.1.2
 
 <br />
 <br />
@@ -45,8 +45,7 @@ function Factorial:
 ## Level 2:
 
 - there are now code blocks
-- Factorial is now a variable instead of a label
-- you call use functions in mathematical expressions, and they evaluate to the last value pushed to the stack
+- Factorial is now a (usable) variable instead of a label
 
 <br />
 
@@ -56,7 +55,8 @@ function Factorial {
 	
 	if (Num > 1) {
 		push Num - 1;
-		return Num * Factorial();
+		Factorial()
+		return Num * pop;
 	}; else {
 		return 1;
 	};
