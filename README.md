@@ -95,4 +95,4 @@ function Factorial (Num) {
 
 Started: 11/28/20
 
-Last updated: 12/20/20
+Last updated: 12/23/20

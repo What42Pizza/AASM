@@ -788,14 +788,14 @@ function Factorial (Num) {
 ### After initial cleaning:
 
 ```
-var Factorial = function (Num) {
+function Factorial (Num) {
 if (Num > 1) {
 return Num * Factorial (Num - 1);
-};
+}
 else {
 return 1;
-};
-};
+}
+}
 ```
 
 <br />
@@ -803,6 +803,92 @@ return 1;
 <br />
 
 ### Split into tokens:
+
+```
+function
+Factorial
+(
+Num
+)
+{
+if
+(
+Num
+>
+1
+)
+{
+return
+Num
+*
+Factorial
+(
+Num
+-
+1
+)
+;
+}
+;
+else
+{
+return
+1
+;
+}
+}
+```
+
+<br />
+<br />
+<br />
+
+### Redo certain parts:
+
+```
+var
+Factorial
+=
+function
+(
+Num
+)
+{
+if
+(
+Num
+>
+1
+)
+{
+return
+Num
+*
+Factorial
+(
+Num
+-
+1
+)
+;
+}
+;
+else
+{
+return
+1
+;
+}
+;
+}
+;
+```
+
+<br />
+<br />
+<br />
+
+### Arrange into blocks:
 
 ```
 block MAIN:
@@ -817,10 +903,71 @@ B0
 
 block 0:
 
-function (
+function
+(
 Num
 )
-if (
+if
+(
+Num
+>
+1
+)
+B1
+;
+else
+B2
+;
+
+
+
+block 1:
+
+return
+Num
+*
+Factorial
+(
+Num
+-
+1
+)
+;
+
+
+
+block 2:
+
+return
+1
+;
+```
+
+<br />
+<br />
+<br />
+
+### Reasemble evaluator tokens:
+
+```
+block MAIN:
+
+var
+Factorial
+=
+B0
+;
+
+
+
+block 0:
+
+function
+(
+Num
+)
+if
+(
 Num > 1
 )
 B1
@@ -832,6 +979,7 @@ B2
 
 
 block 1:
+
 return
 Num * Factorial (Num - 1)
 ;
@@ -839,6 +987,7 @@ Num * Factorial (Num - 1)
 
 
 block 2:
+
 return
 1
 ;
@@ -848,7 +997,61 @@ return
 <br />
 <br />
 
-### Arranged into instructions:
+### Insert get-return-s:
+
+```
+block MAIN:
+
+var
+Factorial
+=
+B0
+;
+
+
+
+block 0:
+
+function
+(
+Num
+)
+if
+(
+Num > 1
+)
+B1
+;
+else
+B2
+;
+
+
+
+block 1:
+
+get-return
+1
+Factorial
+Num - 1 // Args for Factorial
+return
+Num * V1
+;
+
+
+
+block 2:
+
+return
+1
+;
+```
+
+<br />
+<br />
+<br />
+
+### Arrange into instructions:
 
 ```
 block MAIN:
@@ -876,7 +1079,7 @@ block 1:
 GR
 1
 Factorial
-Num - 1 // Args for Factorial
+Num - 1
 R
 Num * V1
 

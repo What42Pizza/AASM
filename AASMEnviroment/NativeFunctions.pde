@@ -1,12 +1,12 @@
 DV ValueOfTHIS; // Temp
 
-NativeFunctions NativeFunctions = new NativeFunctions();
+Native_Functions NativeFunctions = new Native_Functions();
 
 
 
 
 
-final public class NativeFunctions {
+final public class Native_Functions {
   
   
   
