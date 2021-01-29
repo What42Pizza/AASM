@@ -1,6 +1,6 @@
 # AASM
 ### Advanced Assembly
-### V0.1.2
+### V0.1.3
 
 <br />
 <br />
@@ -19,7 +19,7 @@ This is supposed to be an advanced assembly language, and it comes in three leve
 - the keyword "function" acts as a label
 - push and pop are for the stack and they're used for functions
 - calling a function (as in "Factorial()") is just a JSR to that label
-- return just returns from a sub-routine, after pushing a value (or multiple values) to the stack
+- return just returns from a sub-routine, after pushing a value to the stack
 
 <br />
 
